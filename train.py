@@ -209,19 +209,19 @@ def draw_plots(hist, logs):
 
 def run_model(backbone, preprocess_func, output, logs, opt='adam', act='relu'):
 
-    df_train = pd.read_csv(TRAIN_CSV, header=None)
-    df_train = df_train.rename(index=str, columns = {0:"path"})
-    df_train['label'] = 'none'
-    df_train.loc[df_train['path'].str.contains("positive"), 'label'] = 'abnormal'
-    df_train.loc[df_train['path'].str.contains("negative"), 'label'] = 'normal'
-    df_train['path'] = '/home/user/chris/datasets/' + df_train['path'].astype(str)
-
-    df_val = pd.read_csv(VALID_CSV, header=None)
-    df_val = df_val.rename(index=str, columns = {0:"path"})
-    df_val['label'] = 'none'
-    df_val.loc[df_val['path'].str.contains("positive"), 'label'] = 'abnormal'
-    df_val.loc[df_val['path'].str.contains("negative"), 'label'] = 'normal'
-    df_val['path'] = '/home/user/chris/datasets/' + df_val['path'].astype(str)
+    # df_train = pd.read_csv(TRAIN_CSV, header=None)
+    # df_train = df_train.rename(index=str, columns = {0:"path"})
+    # df_train['label'] = 'none'
+    # df_train.loc[df_train['path'].str.contains("positive"), 'label'] = 'abnormal'
+    # df_train.loc[df_train['path'].str.contains("negative"), 'label'] = 'normal'
+    # df_train['path'] = '/home/user/chris/datasets/' + df_train['path'].astype(str)
+    #
+    # df_val = pd.read_csv(VALID_CSV, header=None)
+    # df_val = df_val.rename(index=str, columns = {0:"path"})
+    # df_val['label'] = 'none'
+    # df_val.loc[df_val['path'].str.contains("positive"), 'label'] = 'abnormal'
+    # df_val.loc[df_val['path'].str.contains("negative"), 'label'] = 'normal'
+    # df_val['path'] = '/home/user/chris/datasets/' + df_val['path'].astype(str)
 
     base_model = backbone(include_top=False, input_shape = (HEIGHT, WIDTH, 3), weights='imagenet')
     predictions = create_fclayer(base_model, act)
