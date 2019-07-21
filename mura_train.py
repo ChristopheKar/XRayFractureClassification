@@ -46,6 +46,7 @@ def create_fclayer(base_model, activation='relu'):
     x = base_model.output
     x = GlobalAveragePooling2D(name='avg_pool2d')(x)
     x = Dropout(0.4)(x)
+    x = Dense(256, activation=activation)(x)
     predictions = Dense(CLASSES, activation=activation)(x)
 
     return predictions
