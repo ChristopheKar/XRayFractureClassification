@@ -193,4 +193,4 @@ def run_model(backbone, preprocess_func, output, logs, opt='adam', act='relu'):
 if __name__ == '__main__':
 
     # run_model(ResNet50, preprocess_resnet, 'resnet50_pets.h5', 'resnet50_pets')
-    run_model(VGG16, preprocess_vgg, 'vgg_mura.h5', 'vgg_mura')
+    run_model(InceptionV3, preprocess_inception, 'iv3_mura.h5', 'iv3_mura')
