@@ -105,17 +105,17 @@ def get_pre_VGG16(conv_base):
 
 def compile_model(base_model, predictions, opt='adam'):
 
-    # model = Model(inputs=base_model.input, outputs=predictions)
+    model = Model(inputs=base_model.input, outputs=predictions)
     #
     # for layer in base_model.layers:
     #     layer.trainable = False
 
     if opt == 'rmsprop':
-        predictions.compile(loss='binary_crossentropy',
+        model.compile(loss='binary_crossentropy',
                       optimizer='rmsprop',
                       metrics=['accuracy'])
     if opt == 'adam':
-        predictions.compile(loss='binary_crossentropy',
+        model.compile(loss='binary_crossentropy',
                       optimizer=Adam(lr=0.00001, decay=0.01),
                       metrics=['accuracy'])
 
@@ -177,8 +177,8 @@ def draw_plots(hist, logs):
 def run_model(backbone, preprocess_func, output, logs, opt='adam', act='relu'):
 
     base_model = backbone(include_top=False, input_shape = (HEIGHT, WIDTH, 3), weights='imagenet')
-    # predictions = create_fclayer(base_model, act)
-    predictions = get_pre_VGG16(base_model)
+    predictions = create_fclayer(base_model, act)
+    # predictions = get_pre_VGG16(base_model)
     train_datagen, validation_datagen = dataset_generator(preprocess_func)
     train_generator, validation_generator = dir_generator(train_datagen, validation_datagen)
     model = compile_model(base_model, predictions, opt)
