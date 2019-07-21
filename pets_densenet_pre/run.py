@@ -56,8 +56,8 @@ def run_MURA(batch_size,
 
 
     im_size = 320   #size root_path nb_epoch nb_dense_block
-    X_train_path, Y_train = data_loader.load_path(root_path = '../../train',size = im_size)
-    X_valid_path, Y_valid = data_loader.load_path(root_path = '../../val', size = im_size)
+    X_train_path, Y_train = data_loader.load_path(root_path = '../../PetImages',size = im_size)
+    X_valid_path, Y_valid = data_loader.load_path(root_path = '../../PetImages', size = im_size)
 
     X_valid = data_loader.load_image(X_valid_path,im_size)
     Y_valid = np.asarray(Y_valid)

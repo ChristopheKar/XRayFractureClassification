@@ -17,7 +17,7 @@ def load_path(root_path = '../valid/XR_ELBOW', size = 512):
 		for name in files:
 			path_1 = os.path.join(root,name)
 			Path.append(path_1)
-			if 'yes' in path_1 or 'positive' in path_1:
+			if 'Cat' in path_1 or 'yes' in path_1 or 'positive' in path_1:
 				labels+=[1]   	          	 #patient11880\\study1_negative\\image3.png
 			else:
 			    labels+=[0]
@@ -30,21 +30,25 @@ def load_image(Path = '../valid/XR_ELBOW', size = 512):
 	for path in Path:
 		if path.endswith('.jpg'):
 			image = cv2.imread(path,cv2.IMREAD_GRAYSCALE)
-			image = cv2.resize(image,(size,size))
-			image = randome_rotation_flip(image,size)
+			try:
+				image = cv2.resize(image,(size,size))
+			except:
+				os.remove(path)
+				continue
+			# image = randome_rotation_flip(image,size)
 			Images.append(image)
 
 	Images = np.asarray(Images).astype('float32')
 
-	mean = np.mean(Images[:, :, :])			#normalization
+	mean = np.mean(Images[:, :, :,])			#normalization
 	std = np.std(Images[:, :, :])
 	Images[:, :, :] = (Images[:, :, :] - mean) / std
 	# Images = np.repeat(Images[..., np.newaxis], 3, -1)
 
-	if K.image_data_format() == "channels_first":
-		Images = np.expand_dims(Images,axis=1)
-	if K.image_data_format() == "channels_last":
-		Images = np.expand_dims(Images,axis=3)             #(usebackend tensorflow:aixs=3; theano:axixs=1)
+	# if K.image_data_format() == "channels_first":
+	# 	Images = np.expand_dims(Images,axis=1)
+	# if K.image_data_format() == "channels_last":
+	# 	Images = np.expand_dims(Images,axis=3)             #(usebackend tensorflow:aixs=3; theano:axixs=1)
 
 	return Images
 
