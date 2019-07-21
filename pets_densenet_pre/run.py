@@ -56,8 +56,8 @@ def run_MURA(batch_size,
 
 
     im_size = 320   #size root_path nb_epoch nb_dense_block
-    X_train_path, Y_train = data_loader.load_path(root_path = '../../PetImages',size = im_size)
-    X_valid_path, Y_valid = data_loader.load_path(root_path = '../../PetImages', size = im_size)
+    X_train_path, Y_train = data_loader.load_path(root_path = '../../PetImages/train',size = im_size)
+    X_valid_path, Y_valid = data_loader.load_path(root_path = '../../PetImages/val', size = im_size)
 
     X_valid = data_loader.load_image(X_valid_path,im_size)
     Y_valid = np.asarray(Y_valid)
@@ -189,7 +189,7 @@ def run_MURA(batch_size,
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description='Run MURA experiment')
-    parser.add_argument('--batch_size', default=4, type=int, #default=64
+    parser.add_argument('--batch_size', default=1, type=int, #default=64
                         help='Batch size')
     parser.add_argument('--nb_epoch',  type=int, default=100,
                         help='Number of epochs')
