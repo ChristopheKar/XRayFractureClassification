@@ -54,7 +54,7 @@ def dataset_generator(preprocess_func):
 
     # create dataset generators
     train_datagen = ImageDataGenerator(
-        preprocessing_function=preprocess_func,
+        rescale=1./255,
         rotation_range=40,
         width_shift_range=0.2,
         height_shift_range=0.2,
@@ -64,7 +64,7 @@ def dataset_generator(preprocess_func):
         fill_mode='nearest')
 
     validation_datagen = ImageDataGenerator(
-        preprocessing_function=preprocess_func,
+        rescale=1./255,
         rotation_range=40,
         width_shift_range=0.2,
         height_shift_range=0.2,
@@ -81,15 +81,27 @@ def dir_generator(train_datagen, validation_datagen):
         TRAIN_DIR,
         target_size = (HEIGHT, WIDTH),
         batch_size = BATCH_SIZE,
-        class_mode = 'categorical')
+        class_mode = 'binary')
 
     validation_generator = validation_datagen.flow_from_directory(
         VAL_DIR,
         target_size = (HEIGHT, WIDTH),
         batch_size = BATCH_SIZE,
-        class_mode = 'categorical')
+        class_mode = 'binary')
 
     return train_generator, validation_generator
+
+def get_pre_VGG16(conv_base):
+
+    conv_base.trainable = False
+
+    model = Sequential()
+    model.add(conv_base)
+    model.add(Flatten())
+    model.add(Dense(256, activation='relu')) # bylo 256
+    model.add(Dense(1, activation='sigmoid'))
+
+    return model
 
 def compile_model(base_model, predictions, opt='adam'):
 
@@ -165,7 +177,8 @@ def draw_plots(hist, logs):
 def run_model(backbone, preprocess_func, output, logs, opt='adam', act='relu'):
 
     base_model = backbone(include_top=False, input_shape = (HEIGHT, WIDTH, 3), weights='imagenet')
-    predictions = create_fclayer(base_model, act)
+    # predictions = create_fclayer(base_model, act)
+    predictions = get_pre_VGG16(base_model)
     train_datagen, validation_datagen = dataset_generator(preprocess_func)
     train_generator, validation_generator = dir_generator(train_datagen, validation_datagen)
     model = compile_model(base_model, predictions, opt)
