@@ -114,15 +114,15 @@ def compile_model(base_model, predictions, opt='adam'):
     #     layer.trainable = False
 
     if opt == 'rmsprop':
-        model.compile(loss='binary_crossentropy',
+        predictions.compile(loss='binary_crossentropy',
                       optimizer='rmsprop',
                       metrics=['accuracy'])
     if opt == 'adam':
-        model.compile(loss='binary_crossentropy',
+        predictions.compile(loss='binary_crossentropy',
                       optimizer=Adam(lr=0.00001, decay=0.01),
                       metrics=['accuracy'])
 
-    return model
+    return predictions
 
 def fit_model(model, train_gen, val_gen, output_name, log_dir):
 
@@ -180,8 +180,8 @@ def draw_plots(hist, logs):
 def run_model(backbone, preprocess_func, output, logs, opt='adam', act='relu'):
 
     base_model = backbone(include_top=False, input_shape = (HEIGHT, WIDTH, 3), weights='imagenet')
-    predictions = create_fclayer(base_model, act)
-    # predictions = get_pre_VGG16(base_model)
+    # predictions = create_fclayer(base_model, act)
+    predictions = get_pre_VGG16(base_model)
     train_datagen, validation_datagen = dataset_generator(preprocess_func)
     train_generator, validation_generator = dir_generator(train_datagen, validation_datagen)
     model = compile_model(base_model, predictions, opt)
