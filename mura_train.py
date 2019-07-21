@@ -27,7 +27,7 @@ from keras_preprocessing.image import ImageDataGenerator
 from keras.callbacks import ModelCheckpoint, LearningRateScheduler, TensorBoard, EarlyStopping
 
 # set dataset parameters
-CLASSES = 2
+CLASSES = 1
 WIDTH, HEIGHT = 200,200
 BATCH_SIZE = 16
 TRAIN_DIR = '/home/ubuntu/wrist/MURA-v1.1/data/train'
