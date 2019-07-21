@@ -105,21 +105,21 @@ def get_pre_VGG16(conv_base):
 
 def compile_model(base_model, predictions, opt='adam'):
 
-    model = Model(inputs=base_model.input, outputs=predictions)
-
-    for layer in base_model.layers:
-        layer.trainable = False
+    # model = Model(inputs=base_model.input, outputs=predictions)
+    #
+    # for layer in base_model.layers:
+    #     layer.trainable = False
 
     if opt == 'rmsprop':
-        model.compile(loss='binary_crossentropy',
+        predictions.compile(loss='binary_crossentropy',
                       optimizer='rmsprop',
                       metrics=['accuracy'])
     if opt == 'adam':
-        model.compile(loss='binary_crossentropy',
+        predictions.compile(loss='binary_crossentropy',
                       optimizer=Adam(lr=0.00001, decay=0.01),
                       metrics=['accuracy'])
 
-    return model
+    return predictions
 
 def fit_model(model, train_gen, val_gen, output_name, log_dir):
 
