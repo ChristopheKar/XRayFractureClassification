@@ -43,7 +43,6 @@ def load_image(Path = '../valid/XR_ELBOW', size = 512):
 	mean = np.mean(Images[:, :, :,])			#normalization
 	std = np.std(Images[:, :, :])
 	Images[:, :, :] = (Images[:, :, :] - mean) / std
-	print('Shape: ', Images.shape)
 	Images = np.repeat(Images[..., np.newaxis], 3, -1)
 
 	# if K.image_data_format() == "channels_first":
