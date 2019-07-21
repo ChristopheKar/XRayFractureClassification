@@ -119,7 +119,7 @@ def compile_model(base_model, predictions, opt='adam'):
                       optimizer=Adam(lr=0.00001, decay=0.01),
                       metrics=['accuracy'])
 
-    return predictions
+    return model
 
 def fit_model(model, train_gen, val_gen, output_name, log_dir):
 
