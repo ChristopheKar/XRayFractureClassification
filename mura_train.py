@@ -105,6 +105,8 @@ def get_pre_VGG16(conv_base):
 
 def compile_model(base_model, predictions, opt='adam'):
 
+    base_model.trainable = False
+
     model = Model(inputs=base_model.input, outputs=predictions)
     #
     # for layer in base_model.layers:
