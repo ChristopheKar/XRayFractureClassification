@@ -12,8 +12,8 @@ import tensorflow as tf
 import pandas as pd
 keras = tf.keras
 
-from keras.models import Model
-from keras.layers import Dense, GlobalAveragePooling2D, Dropout, BatchNormalization
+from keras.models import Model, Sequential
+from keras.layers import Dense, GlobalAveragePooling2D, Dropout, BatchNormalization, Flatten
 from keras.optimizers import Adam
 from keras.applications.inception_v3 import InceptionV3
 from keras.applications.inception_v3 import preprocess_input as preprocess_inception
