@@ -28,7 +28,7 @@ from keras.callbacks import ModelCheckpoint, LearningRateScheduler, TensorBoard,
 
 # set dataset parameters
 CLASSES = 1
-WIDTH, HEIGHT = 200,200
+WIDTH, HEIGHT = 220,220
 BATCH_SIZE = 16
 TRAIN_DIR = '/home/user/chris/datasets/wrist_fyp/split/train'
 VAL_DIR = '/home/user/chris/datasets/wrist_fyp/split/val'
