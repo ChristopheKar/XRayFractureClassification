@@ -128,7 +128,7 @@ def compile_model(model, opt='adam'):
                       metrics=['accuracy'])
     if opt == 'adam':
         model.compile(loss='binary_crossentropy',
-                      optimizer=Adam(lr=0.00001, decay=0.01),
+                      optimizer=Adam(lr=0.0001, decay=0.01),
                       metrics=['accuracy'])
 
     return model
