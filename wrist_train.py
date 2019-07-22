@@ -122,7 +122,7 @@ def fine_tuning(model, conv_base, layer_name):
     return model
 
 def step_decay(epoch):
-	initial_lrate = 0.1
+	initial_lrate = 0.01
 	drop = 0.5
 	epochs_drop = 10.0
 	lrate = initial_lrate * math.pow(drop, math.floor((1+epoch)/epochs_drop))
