@@ -216,10 +216,10 @@ def run_model(backbone, preprocess_func, output, logs, opt='adam', act='relu'):
     draw_plots(hist, logs)
     model = fine_tuning(model, base_model, 'block5_conv1')
     model = compile_model(base_model, predictions, opt)
-    hist, model = fit_model(model, train_generator, validation_generator, 'dense_wrist_fine', 'dense_wrist_fine', 'fine')
+    hist, model = fit_model(model, train_generator, validation_generator, 'dense_wrist_fine2', 'dense_wrist_fine2', 'fine')
     draw_plots(hist, logs)
 
 if __name__ == '__main__':
 
     # run_model(ResNet50, preprocess_resnet, 'resnet50_pets.h5', 'resnet50_pets')
-    run_model(DenseNet169, preprocess_dense, 'dense_wrist.h5', 'dense_wrist')
+    run_model(DenseNet169, preprocess_dense, 'dense_wrist2.h5', 'dense_wrist2')
