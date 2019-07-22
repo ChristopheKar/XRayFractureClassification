@@ -40,16 +40,16 @@ EPOCHS = 100
 STEPS_PER_EPOCH = NUM_TRAIN//BATCH_SIZE
 VALIDATION_STEPS = NUM_VAL//BATCH_SIZE
 
-def create_fclayer(base_model, activation='relu'):
-
-    # Create classification fully connected layer
-    x = base_model.output
-    x = GlobalAveragePooling2D(name='avg_pool2d')(x)
-    x = Dropout(0.4)(x)
-    x = Dense(256, activation=activation)(x)
-    predictions = Dense(CLASSES, activation=activation)(x)
-
-    return predictions
+# def create_fclayer(base_model, activation='relu'):
+#
+#     # Create classification fully connected layer
+#     x = base_model.output
+#     x = GlobalAveragePooling2D(name='avg_pool2d')(x)
+#     x = Dropout(0.4)(x)
+#     x = Dense(256, activation=activation)(x)
+#     predictions = Dense(CLASSES, activation=activation)(x)
+#
+#     return predictions
 
 def dataset_generator(preprocess_func):
 
@@ -92,19 +92,20 @@ def dir_generator(train_datagen, validation_datagen):
 
     return train_generator, validation_generator
 
-def get_pre_VGG16(conv_base):
+def create_fclayer(conv_base):
 
     conv_base.trainable = False
 
     model = Sequential()
     model.add(conv_base)
     model.add(Flatten())
+    model.add(Dropout(0.4))
     model.add(Dense(256, activation='relu')) # bylo 256
-    model.add(Dense(1, activation='sigmoid'))
+    model.add(Dense(1, activation='relu'))
 
     return model
 
-def fine_tuning(model,conv_base,layer_name):
+def fine_tuning(model, conv_base, layer_name):
 
     conv_base.trainable = True
     set_trainable = False
@@ -122,20 +123,13 @@ def fine_tuning(model,conv_base,layer_name):
 
 def compile_model(base_model, predictions, opt='adam'):
 
-    # base_model.trainable = False
-
-    # model = Model(inputs=base_model.input, outputs=predictions)
-    #
-    # for layer in base_model.layers:
-    #     layer.trainable = False
-
     if opt == 'rmsprop':
         predictions.compile(loss='binary_crossentropy',
                       optimizer='rmsprop',
                       metrics=['accuracy'])
     if opt == 'adam':
         predictions.compile(loss='binary_crossentropy',
-                      optimizer=Adam(lr=0.00001, decay=0.01),
+                      optimizer=Adam(lr=0.0001, decay=0.01),
                       metrics=['accuracy'])
 
     return predictions
@@ -213,7 +207,7 @@ def run_model(backbone, preprocess_func, output, logs, opt='adam', act='relu'):
 
     base_model = backbone(include_top=False, input_shape = (HEIGHT, WIDTH, 3), weights='imagenet')
     # predictions = create_fclayer(base_model, act)
-    predictions = get_pre_VGG16(base_model)
+    predictions = create_fclayer(base_model)
     train_datagen, validation_datagen = dataset_generator(preprocess_func)
     train_generator, validation_generator = dir_generator(train_datagen, validation_datagen)
     model = compile_model(base_model, predictions, opt)
