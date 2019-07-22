@@ -172,7 +172,6 @@ def fit_model(model, train_gen, val_gen, output_name, log_dir, steps='norm'):
                                       steps_per_epoch=100,epochs=25,
                                       validation_data=val_gen,
                                       validation_steps=50,
-                                      verbose=2,
                                       callbacks=[checkpoint, tensorboard])
 
     elif steps == 'fine':
@@ -182,7 +181,6 @@ def fit_model(model, train_gen, val_gen, output_name, log_dir, steps='norm'):
                                        epochs=125,
                                        validation_data=val_gen,
                                        validation_steps=50,
-                                       verbose=2,
                                        callbacks=[checkpoint, tensorboard])
 
     return history, model
