@@ -161,27 +161,26 @@ def fit_model(model, train_gen, val_gen, output_name, log_dir, steps='norm'):
 
     # fit model
     if steps == 'norm':
-        history = model.fit_generator(
-                                    train_gen,
-                                    epochs=EPOCHS,
-                                    steps_per_epoch=STEPS_PER_EPOCH,
-                                    validation_data=val_gen,
-                                    validation_steps=VALIDATION_STEPS,
-                                    callbacks=[checkpoint, tensorboard])
+        history = model.fit_generator(train_gen,
+                                      epochs=EPOCHS,
+                                      steps_per_epoch=STEPS_PER_EPOCH,
+                                      validation_data=val_gen,
+                                      validation_steps=VALIDATION_STEPS,
+                                      callbacks=[checkpoint, tensorboard])
     elif steps == 'init':
-        history = model.fit_generator(train_generator,
+        history = model.fit_generator(train_gen,
                                       steps_per_epoch=100,epochs=25,
-                                      validation_data=validation_generator,
+                                      validation_data=val_gen,
                                       validation_steps=50,
                                       verbose=2,
                                       callbacks=[checkpoint, tensorboard])
 
     elif steps == 'fine':
 
-        history = model.fit_generator(train_generator,
+        history = model.fit_generator(train_gen,
                                        steps_per_epoch=125,
                                        epochs=125,
-                                       validation_data=validation_generator,
+                                       validation_data=val_gen,
                                        validation_steps=50,
                                        verbose=2,
                                        callbacks=[checkpoint, tensorboard])
