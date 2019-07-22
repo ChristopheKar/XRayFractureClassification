@@ -171,8 +171,8 @@ def fit_model(model, train_gen, val_gen, output_name, log_dir, steps='norm'):
     elif steps == 'fine':
 
         history = model.fit_generator(train_gen,
-                                       steps_per_epoch=125,
-                                       epochs=125,
+                                       steps_per_epoch=150,
+                                       epochs=150,
                                        validation_data=val_gen,
                                        validation_steps=50,
                                        callbacks=[checkpoint, tensorboard])
