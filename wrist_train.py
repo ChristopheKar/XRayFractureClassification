@@ -6,6 +6,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import os
+import math
 import numpy as np
 import matplotlib.pyplot as plt
 import tensorflow as tf
@@ -120,6 +121,13 @@ def fine_tuning(model, conv_base, layer_name):
 
     return model
 
+def step_decay(epoch):
+	initial_lrate = 0.1
+	drop = 0.5
+	epochs_drop = 10.0
+	lrate = initial_lrate * math.pow(drop, math.floor((1+epoch)/epochs_drop))
+	return lrate
+
 def compile_model(model, opt='adam'):
 
     if opt == 'rmsprop':
@@ -152,6 +160,9 @@ def fit_model(model, train_gen, val_gen, output_name, log_dir, steps='norm'):
                               write_graph=True,
                               write_images=False)
 
+    # set up learning rate schedule
+    lrate = LearningRateScheduler(step_decay)
+
     # fit model
     if steps == 'norm':
         history = model.fit_generator(train_gen,
@@ -174,7 +185,7 @@ def fit_model(model, train_gen, val_gen, output_name, log_dir, steps='norm'):
                                        epochs=150,
                                        validation_data=val_gen,
                                        validation_steps=50,
-                                       callbacks=[checkpoint, tensorboard])
+                                       callbacks=[checkpoint, tensorboard, lrate])
 
     return history, model
 
@@ -215,10 +226,10 @@ def run_model(backbone, preprocess_func, output, logs, opt='adam', act='relu'):
     draw_plots(hist, logs)
     model = fine_tuning(model, base_model, 'block5_conv1')
     model = compile_model(model, opt)
-    hist, model = fit_model(model, train_generator, validation_generator, 'dense_wrist_fine2', 'dense_wrist_fine2', 'fine')
+    hist, model = fit_model(model, train_generator, validation_generator, 'dense_wrist_fine_lr', 'dense_wrist_fine_lr', 'fine')
     draw_plots(hist, logs)
 
 if __name__ == '__main__':
 
     # run_model(ResNet50, preprocess_resnet, 'resnet50_pets.h5', 'resnet50_pets')
-    run_model(DenseNet169, preprocess_dense, 'dense_wrist2.h5', 'dense_wrist2')
+    run_model(DenseNet169, preprocess_dense, 'dense_wrist_lr.h5', 'dense_wrist_lr')
