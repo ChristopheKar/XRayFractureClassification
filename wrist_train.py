@@ -206,15 +206,15 @@ def run_model(backbone, preprocess_func, output, logs, opt='adam', act='relu'):
 
     base_model = backbone(include_top=False, input_shape = (HEIGHT, WIDTH, 3), weights='imagenet')
     # predictions = create_fclayer(base_model, act)
-    predictions = create_fclayer(base_model)
+    model = create_fclayer(base_model)
     train_datagen, validation_datagen = dataset_generator(preprocess_func)
     train_generator, validation_generator = dir_generator(train_datagen, validation_datagen)
-    model = compile_model(base_model, predictions, opt)
+    model = compile_model(model, opt)
 
     hist, model = fit_model(model, train_generator, validation_generator, output, logs, 'init')
     draw_plots(hist, logs)
     model = fine_tuning(model, base_model, 'block5_conv1')
-    model = compile_model(base_model, predictions, opt)
+    model = compile_model(model, opt)
     hist, model = fit_model(model, train_generator, validation_generator, 'dense_wrist_fine2', 'dense_wrist_fine2', 'fine')
     draw_plots(hist, logs)
 
