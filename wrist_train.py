@@ -99,7 +99,6 @@ def create_fclayer(conv_base):
     model = Sequential()
     model.add(conv_base)
     model.add(Flatten())
-    model.add(Dropout(0.4))
     model.add(Dense(256, activation='relu')) # bylo 256
     model.add(Dense(1, activation='relu'))
 
@@ -121,18 +120,18 @@ def fine_tuning(model, conv_base, layer_name):
 
     return model
 
-def compile_model(base_model, predictions, opt='adam'):
+def compile_model(model, opt='adam'):
 
     if opt == 'rmsprop':
-        predictions.compile(loss='binary_crossentropy',
+        model.compile(loss='binary_crossentropy',
                       optimizer='rmsprop',
                       metrics=['accuracy'])
     if opt == 'adam':
-        predictions.compile(loss='binary_crossentropy',
+        model.compile(loss='binary_crossentropy',
                       optimizer=Adam(lr=0.0001, decay=0.01),
                       metrics=['accuracy'])
 
-    return predictions
+    return model
 
 def fit_model(model, train_gen, val_gen, output_name, log_dir, steps='norm'):
 
