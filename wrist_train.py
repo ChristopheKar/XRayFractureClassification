@@ -104,6 +104,22 @@ def get_pre_VGG16(conv_base):
 
     return model
 
+def fine_tuning(model,conv_base,layer_name):
+
+    conv_base.trainable = True
+    set_trainable = False
+
+    for layer in conv_base.layers:
+
+        if layer.name == layer_name:
+            set_trainable = True
+        if set_trainable:
+            layer.trainable = True
+        else:
+            layer.trainable = False
+
+    return model
+
 def compile_model(base_model, predictions, opt='adam'):
 
     # base_model.trainable = False
@@ -124,7 +140,7 @@ def compile_model(base_model, predictions, opt='adam'):
 
     return predictions
 
-def fit_model(model, train_gen, val_gen, output_name, log_dir):
+def fit_model(model, train_gen, val_gen, output_name, log_dir, steps='norm'):
 
     model_file = os.path.join('models', output_name)
     log_dir = os.path.join('./logs', log_dir)
@@ -142,16 +158,35 @@ def fit_model(model, train_gen, val_gen, output_name, log_dir):
                               histogram_freq=0,
                               write_graph=True,
                               write_images=False)
-    # fit model
-    history = model.fit_generator(
-                                train_gen,
-                                epochs=EPOCHS,
-                                steps_per_epoch=STEPS_PER_EPOCH,
-                                validation_data=val_gen,
-                                validation_steps=VALIDATION_STEPS,
-                                callbacks=[checkpoint, tensorboard])
 
-    return history
+    # fit model
+    if steps == 'norm':
+        history = model.fit_generator(
+                                    train_gen,
+                                    epochs=EPOCHS,
+                                    steps_per_epoch=STEPS_PER_EPOCH,
+                                    validation_data=val_gen,
+                                    validation_steps=VALIDATION_STEPS,
+                                    callbacks=[checkpoint, tensorboard])
+    elif steps == 'init':
+        history = model.fit_generator(train_generator,
+                                      steps_per_epoch=100,epochs=25,
+                                      validation_data=validation_generator,
+                                      validation_steps=50,
+                                      verbose=2,
+                                      callbacks=[checkpoint, tensorboard])
+
+    elif steps == 'fine':
+
+        history = model.fit_generator(train_generator,
+                                       steps_per_epoch=125,
+                                       epochs=125,
+                                       validation_data=validation_generator,
+                                       validation_steps=50,
+                                       verbose=2,
+                                       callbacks=[checkpoint, tensorboard])
+
+    return history, model
 
 def draw_plots(hist, logs):
 
@@ -186,9 +221,11 @@ def run_model(backbone, preprocess_func, output, logs, opt='adam', act='relu'):
     train_generator, validation_generator = dir_generator(train_datagen, validation_datagen)
     model = compile_model(base_model, predictions, opt)
 
-    hist = fit_model(model, train_generator, validation_generator, output, logs)
+    hist, model = fit_model(model, train_generator, validation_generator, output, logs, 'init')
     draw_plots(hist, logs)
-
+    model = fine_tuning(model, base_model, 'block5_conv1')
+    hist, model = fit_model(model, train_generator, validation_generator, 'vgg_wrist_fine', 'vgg_wrist_fine', 'fine')
+    draw_plots(hist, logs)
 
 if __name__ == '__main__':
 
