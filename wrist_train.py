@@ -221,6 +221,7 @@ def run_model(backbone, preprocess_func, output, logs, opt='adam', act='relu'):
     hist, model = fit_model(model, train_generator, validation_generator, output, logs, 'init')
     draw_plots(hist, logs)
     model = fine_tuning(model, base_model, 'block5_conv1')
+    model = compile_model(base_model, predictions, opt)
     hist, model = fit_model(model, train_generator, validation_generator, 'dense_wrist_fine', 'dense_wrist_fine', 'fine')
     draw_plots(hist, logs)
 
