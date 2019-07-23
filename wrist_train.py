@@ -32,8 +32,13 @@ from keras.callbacks import ModelCheckpoint, LearningRateScheduler, TensorBoard,
 CLASSES = 1
 WIDTH, HEIGHT = 220,220
 BATCH_SIZE = 16
-TRAIN_DIR = '/home/user/chris/datasets/wrist_fyp/split/train'
-VAL_DIR = '/home/user/chris/datasets/wrist_fyp/split/val'
+if user in os.environ['HOME']:
+    TRAIN_DIR = '/home/user/chris/datasets/wrist_fyp/split/train'
+    VAL_DIR = '/home/user/chris/datasets/wrist_fyp/split/val'
+else:
+    TRAIN_DIR = '/home/ubuntu/wrist/datasets/split/train'
+    VAL_DIR = '/home/ubuntu/wrist/datasets/split/val'
+    
 NUM_TRAIN = 15220
 NUM_VAL = 1904
 
