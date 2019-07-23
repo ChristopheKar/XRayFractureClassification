@@ -23,7 +23,7 @@ from keras.applications.resnet50 import ResNet50
 from keras.applications.resnet50 import preprocess_input as preprocess_resnet
 from keras.applications.vgg16 import VGG16
 from keras.applications.vgg16 import preprocess_input as preprocess_vgg
-from keras.applications.densenet import DenseNet169
+from keras.applications.densenet import DenseNet169, DenseNet201
 from keras.applications.densenet import preprocess_input as preprocess_dense
 from keras_preprocessing.image import ImageDataGenerator
 from keras.callbacks import ModelCheckpoint, LearningRateScheduler, TensorBoard, EarlyStopping
@@ -38,7 +38,7 @@ if user in os.environ['HOME']:
 else:
     TRAIN_DIR = '/home/ubuntu/wrist/datasets/split/train'
     VAL_DIR = '/home/ubuntu/wrist/datasets/split/val'
-    
+
 NUM_TRAIN = 15220
 NUM_VAL = 1904
 
@@ -233,13 +233,13 @@ def run_model(backbone, preprocess_func, output, logs, opt='adam', act='relu'):
     draw_plots(hist, logs)
     model = fine_tuning(model, base_model, 'block5_conv1')
     model = compile_model(model, opt)
-    hist, model = fit_model(model, train_generator, validation_generator, 'dense_wrist_fine_dr', 'dense_wrist_fine_dr', 'fine')
+    hist, model = fit_model(model, train_generator, validation_generator, 'd201.h5', 'd201', 'fine')
     draw_plots(hist, logs)
 
 if __name__ == '__main__':
 
     start_time = time.time()
     # run_model(ResNet50, preprocess_resnet, 'resnet50_pets.h5', 'resnet50_pets')
-    run_model(DenseNet169, preprocess_dense, 'dense_wrist_dr.h5', 'dense_wrist_dr')
+    run_model(DenseNet169, preprocess_dense, 'd201.h5', 'd201')
     end_time = time.time()
     print('Total time: {:.3f}'.format((end_time - start_time)/3600))
