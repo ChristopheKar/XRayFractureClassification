@@ -101,6 +101,7 @@ def create_fclayer(conv_base):
     model.add(conv_base)
     model.add(Flatten())
     model.add(Dense(256, activation='relu')) # bylo 256
+    model.add(Dropout(0.5))
     model.add(Dense(1, activation='sigmoid'))
 
     return model
@@ -185,7 +186,7 @@ def fit_model(model, train_gen, val_gen, output_name, log_dir, steps='norm'):
                                        epochs=150,
                                        validation_data=val_gen,
                                        validation_steps=50,
-                                       callbacks=[checkpoint, tensorboard, lrate])
+                                       callbacks=[checkpoint, tensorboard])
 
     return history, model
 
@@ -226,10 +227,10 @@ def run_model(backbone, preprocess_func, output, logs, opt='adam', act='relu'):
     draw_plots(hist, logs)
     model = fine_tuning(model, base_model, 'block5_conv1')
     model = compile_model(model, opt)
-    hist, model = fit_model(model, train_generator, validation_generator, 'dense_wrist_fine_lr', 'dense_wrist_fine_lr', 'fine')
+    hist, model = fit_model(model, train_generator, validation_generator, 'dense_wrist_fine_dr', 'dense_wrist_fine_dr', 'fine')
     draw_plots(hist, logs)
 
 if __name__ == '__main__':
 
     # run_model(ResNet50, preprocess_resnet, 'resnet50_pets.h5', 'resnet50_pets')
-    run_model(DenseNet169, preprocess_dense, 'dense_wrist_lr.h5', 'dense_wrist_lr')
+    run_model(DenseNet169, preprocess_dense, 'dense_wrist_dr.h5', 'dense_wrist_dr')
