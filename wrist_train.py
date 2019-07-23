@@ -6,6 +6,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import os
+import time
 import math
 import numpy as np
 import matplotlib.pyplot as plt
@@ -232,5 +233,8 @@ def run_model(backbone, preprocess_func, output, logs, opt='adam', act='relu'):
 
 if __name__ == '__main__':
 
+    start_time = time.time()
     # run_model(ResNet50, preprocess_resnet, 'resnet50_pets.h5', 'resnet50_pets')
     run_model(DenseNet169, preprocess_dense, 'dense_wrist_dr.h5', 'dense_wrist_dr')
+    end_time = time.time()
+    print('Total time: {:.3f}'.format((end_time - start_time)/3600))
