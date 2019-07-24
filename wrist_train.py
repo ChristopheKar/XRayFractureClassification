@@ -108,7 +108,7 @@ def create_fclayer(conv_base):
     model.add(conv_base)
     model.add(Flatten())
     model.add(Dense(256, activation='relu')) # bylo 256
-    model.add(Dense(1, activation='sigmoid'))
+    model.add(Dense(1, activation='softmax'))
 
     return model
 
@@ -240,6 +240,6 @@ if __name__ == '__main__':
 
     start_time = time.time()
     # run_model(ResNet50, preprocess_resnet, 'resnet50_pets.h5', 'resnet50_pets')
-    run_model(InceptionResNetV2, preprocess_dense, 'iv4.h5', 'iv4')
+    run_model(DenseNet169, preprocess_dense, 'd169_soft.h5', 'd169_soft')
     end_time = time.time()
     print('Total time: {:.3f}'.format((end_time - start_time)/3600))
