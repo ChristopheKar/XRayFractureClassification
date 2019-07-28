@@ -22,6 +22,7 @@ from keras.applications.inception_v3 import preprocess_input as preprocess_incep
 from keras.applications.inception_resnet_v2 import InceptionResNetV2
 from keras.applications.resnet50 import ResNet50
 from keras.applications.resnet50 import preprocess_input as preprocess_resnet
+from keras.applications.nasnet import NasNetLarge, NasNetMobile
 from keras.applications.vgg16 import VGG16
 from keras.applications.vgg16 import preprocess_input as preprocess_vgg
 from keras.applications.densenet import DenseNet169, DenseNet201
@@ -31,7 +32,7 @@ from keras.callbacks import ModelCheckpoint, LearningRateScheduler, TensorBoard,
 
 # set dataset parameters
 CLASSES = 1
-WIDTH, HEIGHT = 299,299
+WIDTH, HEIGHT = 331,331
 BATCH_SIZE = 16
 if 'user' in os.environ['HOME']:
     TRAIN_DIR = '/home/user/chris/datasets/wrist_fyp/split/train'
@@ -240,6 +241,6 @@ if __name__ == '__main__':
 
     start_time = time.time()
     # run_model(ResNet50, preprocess_resnet, 'resnet50_pets.h5', 'resnet50_pets')
-    run_model(DenseNet201, preprocess_dense, 'd201.h5', 'd201')
+    run_model(NasNetLarge, preprocess_dense, 'naslarge.h5', 'naslarge')
     end_time = time.time()
     print('Total time: {:.3f}'.format((end_time - start_time)/3600))
