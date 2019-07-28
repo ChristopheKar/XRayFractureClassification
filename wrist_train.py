@@ -22,7 +22,7 @@ from keras.applications.inception_v3 import preprocess_input as preprocess_incep
 from keras.applications.inception_resnet_v2 import InceptionResNetV2
 from keras.applications.resnet50 import ResNet50
 from keras.applications.resnet50 import preprocess_input as preprocess_resnet
-from keras.applications.nasnet import NasNetLarge, NasNetMobile
+from keras.applications.nasnet import NASNetLarge, NASNetMobile
 from keras.applications.vgg16 import VGG16
 from keras.applications.vgg16 import preprocess_input as preprocess_vgg
 from keras.applications.densenet import DenseNet169, DenseNet201
