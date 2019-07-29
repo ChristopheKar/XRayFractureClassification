@@ -108,10 +108,14 @@ def create_fclayer(conv_base):
     model = Sequential()
     model.add(conv_base)
     model.add(Flatten())
-    model.add(Dense(1024, activation='relu')) # bylo 256
+    model.add(Dense(1024, activation='relu'))
     model.add(Dense(512, activation='relu'))
+    model.add(Dropout(0.4))
     model.add(Dense(256, activation='relu'))
     model.add(Dense(128, activation='relu'))
+    model.add(Dropout(0.4))
+    model.add(Dense(64, activation='relu'))
+    model.add(Dense(32, activation='relu'))
     model.add(Dense(1, activation='sigmoid'))
 
     return model
