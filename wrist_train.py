@@ -108,7 +108,10 @@ def create_fclayer(conv_base):
     model = Sequential()
     model.add(conv_base)
     model.add(Flatten())
-    model.add(Dense(256, activation='relu')) # bylo 256
+    model.add(Dense(1024, activation='relu')) # bylo 256
+    model.add(Dense(512, activation='relu'))
+    model.add(Dense(256, activation='relu'))
+    model.add(Dense(128, activation='relu'))
     model.add(Dense(1, activation='sigmoid'))
 
     return model
@@ -241,6 +244,6 @@ if __name__ == '__main__':
 
     start_time = time.time()
     # run_model(ResNet50, preprocess_resnet, 'resnet50_pets.h5', 'resnet50_pets')
-    run_model(NASNetLarge, preprocess_dense, 'naslarge.h5', 'naslarge')
+    run_model(DenseNet169, preprocess_dense, 'd169_4fc.h5', 'd169_4fc')
     end_time = time.time()
     print('Total time: {:.3f}'.format((end_time - start_time)/3600))
