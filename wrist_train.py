@@ -32,8 +32,8 @@ from keras.callbacks import ModelCheckpoint, LearningRateScheduler, TensorBoard,
 
 # set dataset parameters
 CLASSES = 1
-WIDTH, HEIGHT = 331,331
-BATCH_SIZE = 8
+WIDTH, HEIGHT = 224, 224
+BATCH_SIZE = 16
 if 'user' in os.environ['HOME']:
     TRAIN_DIR = '/home/user/chris/datasets/wrist_fyp/split/train'
     VAL_DIR = '/home/user/chris/datasets/wrist_fyp/split/val'
@@ -248,6 +248,6 @@ if __name__ == '__main__':
 
     start_time = time.time()
     # run_model(ResNet50, preprocess_resnet, 'resnet50_pets.h5', 'resnet50_pets')
-    run_model(DenseNet169, preprocess_dense, 'd169_4fc.h5', 'd169_4fc')
+    run_model(DenseNet169, preprocess_dense, 'd169_6fc.h5', 'd169_6fc')
     end_time = time.time()
     print('Total time: {:.3f}'.format((end_time - start_time)/3600))
