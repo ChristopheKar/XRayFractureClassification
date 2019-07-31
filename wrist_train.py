@@ -31,18 +31,23 @@ from keras_preprocessing.image import ImageDataGenerator
 from keras.callbacks import ModelCheckpoint, LearningRateScheduler, TensorBoard, EarlyStopping
 
 # set dataset parameters
-CLASSES = 1
+CLASSES = 7
+# CLASSES = 1
 WIDTH, HEIGHT = 224, 224
 BATCH_SIZE = 16
 if 'user' in os.environ['HOME']:
     TRAIN_DIR = '/home/user/chris/datasets/wrist_fyp/split/train'
     VAL_DIR = '/home/user/chris/datasets/wrist_fyp/split/val'
 else:
-    TRAIN_DIR = '/home/ubuntu/wrist/datasets/split/train'
-    VAL_DIR = '/home/ubuntu/wrist/datasets/split/val'
+    # TRAIN_DIR = '/home/ubuntu/wrist/datasets/split/train'
+    # VAL_DIR = '/home/ubuntu/wrist/datasets/split/val'
+    TRAIN_DIR = '/home/ubuntu/wrist/datasets/MURA_classification/train'
+    VAL_DIR = '/home/ubuntu/wrist/datasets/MURA_classification/valid'
 
-NUM_TRAIN = 15220
-NUM_VAL = 1904
+# NUM_TRAIN = 15220
+# NUM_VAL = 1904
+NUM_TRAIN = 36804
+NUM_VAL = 3197
 
 # set training parameters
 EPOCHS = 100
@@ -91,13 +96,13 @@ def dir_generator(train_datagen, validation_datagen):
         TRAIN_DIR,
         target_size = (HEIGHT, WIDTH),
         batch_size = BATCH_SIZE,
-        class_mode = 'binary')
+        class_mode = 'categorical')
 
     validation_generator = validation_datagen.flow_from_directory(
         VAL_DIR,
         target_size = (HEIGHT, WIDTH),
         batch_size = BATCH_SIZE,
-        class_mode = 'binary')
+        class_mode = 'categorical')
 
     return train_generator, validation_generator
 
@@ -146,11 +151,11 @@ def step_decay(epoch):
 def compile_model(model, opt='adam'):
 
     if opt == 'rmsprop':
-        model.compile(loss='binary_crossentropy',
+        model.compile(loss='categorical_crossentropy',
                       optimizer='rmsprop',
                       metrics=['accuracy'])
     if opt == 'adam':
-        model.compile(loss='binary_crossentropy',
+        model.compile(loss='categorical_crossentropy',
                       optimizer=Adam(lr=0.0001, decay=0.01),
                       metrics=['accuracy'])
 
@@ -248,6 +253,6 @@ if __name__ == '__main__':
 
     start_time = time.time()
     # run_model(ResNet50, preprocess_resnet, 'resnet50_pets.h5', 'resnet50_pets')
-    run_model(DenseNet169, preprocess_dense, 'd169_6fc.h5', 'd169_6fc')
+    run_model(DenseNet169, preprocess_dense, 'd169_6fc_mura_class.h5', 'd169_6fc_mura_class')
     end_time = time.time()
     print('Total time: {:.3f}'.format((end_time - start_time)/3600))
