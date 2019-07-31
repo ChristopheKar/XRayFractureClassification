@@ -121,7 +121,7 @@ def create_fclayer(conv_base):
     model.add(Dropout(0.4))
     model.add(Dense(64, activation='relu'))
     model.add(Dense(32, activation='relu'))
-    model.add(Dense(CLASSES, activation='relu'))
+    model.add(Dense(CLASSES, activation='sigmoid'))
 
     return model
 
