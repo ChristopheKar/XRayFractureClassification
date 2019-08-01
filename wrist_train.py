@@ -14,6 +14,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 # keras = tf.keras
 
+from keras.models import load_model
 from keras.models import Model, Sequential
 from keras.layers import Dense, GlobalAveragePooling2D, Dropout, BatchNormalization, Flatten
 from keras.optimizers import Adam
@@ -237,7 +238,7 @@ def run_model(backbone, preprocess_func, output, logs, opt='adam', act='relu'):
 
     # base_model = backbone(include_top=False, input_shape = (HEIGHT, WIDTH, 3), weights='imagenet')
     # predictions = create_fclayer(base_model, act)
-    base_model = keras.models.load_model(os.path.join(os.environ['HOME'], 'wrist/classification/models/d169_6fc_mura_class.h5'))
+    base_model = load_model(os.path.join(os.environ['HOME'], 'wrist/classification/models/d169_6fc_mura_class.h5'))
     for i in range(10):
         base_model._layers.pop()
     base_model.summary()
