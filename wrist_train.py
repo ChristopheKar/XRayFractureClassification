@@ -97,13 +97,13 @@ def dir_generator(train_datagen, validation_datagen):
         TRAIN_DIR,
         target_size = (HEIGHT, WIDTH),
         batch_size = BATCH_SIZE,
-        class_mode = 'categorical')
+        class_mode = 'binary')
 
     validation_generator = validation_datagen.flow_from_directory(
         VAL_DIR,
         target_size = (HEIGHT, WIDTH),
         batch_size = BATCH_SIZE,
-        class_mode = 'categorical')
+        class_mode = 'binary')
 
     return train_generator, validation_generator
 
@@ -152,11 +152,11 @@ def step_decay(epoch):
 def compile_model(model, opt='adam'):
 
     if opt == 'rmsprop':
-        model.compile(loss='categorical_crossentropy',
+        model.compile(loss='binary_crossentropy',
                       optimizer='rmsprop',
                       metrics=['accuracy'])
     if opt == 'adam':
-        model.compile(loss='categorical_crossentropy',
+        model.compile(loss='binary_crossentropy',
                       optimizer=Adam(lr=0.0001, decay=0.01),
                       metrics=['accuracy'])
 
