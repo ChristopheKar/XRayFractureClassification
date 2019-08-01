@@ -240,7 +240,7 @@ def run_model(backbone, preprocess_func, output, logs, opt='adam', act='relu'):
     base_model = keras.models.load_model(os.path.join(os.environ['HOME'], 'wrist/classification/models/d169_6fc_mura_class.h5'))
     for i in range(10):
         base_model._layers.pop()
-    model.summary()
+    base_model.summary()
     model = create_fclayer(base_model)
     train_datagen, validation_datagen = dataset_generator(preprocess_func)
     train_generator, validation_generator = dir_generator(train_datagen, validation_datagen)
