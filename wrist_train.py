@@ -31,23 +31,23 @@ from keras_preprocessing.image import ImageDataGenerator
 from keras.callbacks import ModelCheckpoint, LearningRateScheduler, TensorBoard, EarlyStopping
 
 # set dataset parameters
-CLASSES = 7
-# CLASSES = 1
+# CLASSES = 7
+CLASSES = 1
 WIDTH, HEIGHT = 224, 224
 BATCH_SIZE = 16
 if 'user' in os.environ['HOME']:
     TRAIN_DIR = '/home/user/chris/datasets/wrist_fyp/split/train'
     VAL_DIR = '/home/user/chris/datasets/wrist_fyp/split/val'
 else:
-    # TRAIN_DIR = '/home/ubuntu/wrist/datasets/split/train'
-    # VAL_DIR = '/home/ubuntu/wrist/datasets/split/val'
-    TRAIN_DIR = '/home/ubuntu/wrist/datasets/MURA_classification/train'
-    VAL_DIR = '/home/ubuntu/wrist/datasets/MURA_classification/valid'
+    TRAIN_DIR = '/home/ubuntu/wrist/datasets/split/train'
+    VAL_DIR = '/home/ubuntu/wrist/datasets/split/val'
+    # TRAIN_DIR = '/home/ubuntu/wrist/datasets/MURA_classification/train'
+    # VAL_DIR = '/home/ubuntu/wrist/datasets/MURA_classification/valid'
 
-# NUM_TRAIN = 15220
-# NUM_VAL = 1904
-NUM_TRAIN = 36804
-NUM_VAL = 3197
+NUM_TRAIN = 15220
+NUM_VAL = 1904
+# NUM_TRAIN = 36804
+# NUM_VAL = 3197
 
 # set training parameters
 EPOCHS = 100
@@ -235,8 +235,12 @@ def draw_plots(hist, logs):
 
 def run_model(backbone, preprocess_func, output, logs, opt='adam', act='relu'):
 
-    base_model = backbone(include_top=False, input_shape = (HEIGHT, WIDTH, 3), weights='imagenet')
+    # base_model = backbone(include_top=False, input_shape = (HEIGHT, WIDTH, 3), weights='imagenet')
     # predictions = create_fclayer(base_model, act)
+    base_model = keras.models.load_model(os.path.join(os.environ['HOME'], 'wrist/classification/models/d169_6fc_mura_class.h5'))
+    for i in range(10):
+        base_model._layers.pop()
+    model.summary()
     model = create_fclayer(base_model)
     train_datagen, validation_datagen = dataset_generator(preprocess_func)
     train_generator, validation_generator = dir_generator(train_datagen, validation_datagen)
@@ -253,6 +257,6 @@ if __name__ == '__main__':
 
     start_time = time.time()
     # run_model(ResNet50, preprocess_resnet, 'resnet50_pets.h5', 'resnet50_pets')
-    run_model(DenseNet169, preprocess_dense, 'd169_6fc_mura_class.h5', 'd169_6fc_mura_class')
+    run_model(DenseNet169, preprocess_dense, 'd169_6fc_finex2.h5', 'd169_6fc_finex2')
     end_time = time.time()
     print('Total time: {:.3f}'.format((end_time - start_time)/3600))
