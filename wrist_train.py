@@ -111,7 +111,7 @@ def create_fclayer(conv_base):
     conv_base.trainable = False
 
     model = Sequential()
-    model.add(conv_base)
+    model.add(conv_base.layers[0])
     model.add(Flatten())
     model.add(Dense(1024, activation='relu'))
     model.add(Dense(512, activation='relu'))
