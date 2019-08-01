@@ -10,9 +10,9 @@ import time
 import math
 import numpy as np
 import matplotlib.pyplot as plt
-import tensorflow as tf
+# import tensorflow as tf
 import pandas as pd
-keras = tf.keras
+# keras = tf.keras
 
 from keras.models import Model, Sequential
 from keras.layers import Dense, GlobalAveragePooling2D, Dropout, BatchNormalization, Flatten
@@ -121,7 +121,7 @@ def create_fclayer(conv_base):
     model.add(Dropout(0.4))
     model.add(Dense(64, activation='relu'))
     model.add(Dense(32, activation='relu'))
-    model.add(Dense(CLASSES, activation='softmax'))
+    model.add(Dense(CLASSES, activation='sigmoid'))
 
     return model
 
