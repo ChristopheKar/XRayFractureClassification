@@ -108,7 +108,7 @@ def create_fclayer(conv_base):
     conv_base.trainable = False
 
     model = Sequential()
-    model.add(conv_base.layers[0])
+    model.add(conv_base)
     model.add(Flatten())
     model.add(Dense(1024, activation='relu'))
     model.add(Dense(512, activation='relu'))
@@ -233,7 +233,6 @@ def draw_plots(hist, logs):
 def run_model(backbone, preprocess_func, output, logs, opt='adam', act='relu'):
 
     base_model = backbone(include_top=False, input_shape = (HEIGHT, WIDTH, 3), weights='imagenet')
-    predictions = create_fclayer(base_model, act)
     model = create_fclayer(base_model)
     train_datagen, validation_datagen = dataset_generator(preprocess_func)
     train_generator, validation_generator = dir_generator(train_datagen, validation_datagen)
