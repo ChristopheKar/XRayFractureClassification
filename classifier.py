@@ -237,6 +237,7 @@ def run_model(backbone, preprocess_func, output, logs, opt='adam', act='relu'):
     train_datagen, validation_datagen = dataset_generator(preprocess_func)
     train_generator, validation_generator = dir_generator(train_datagen, validation_datagen)
     model = compile_model(model, opt)
+    model.summary()
 
     hist, model = fit_model(model, train_generator, validation_generator, output, logs, 'init')
     draw_plots(hist, logs)
