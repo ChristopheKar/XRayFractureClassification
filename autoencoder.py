@@ -197,7 +197,7 @@ def fit_model(model, train_gen, val_gen, output_name, log_dir, steps='norm'):
                                       callbacks=[checkpoint, tensorboard])
     elif steps == 'init':
         history = model.fit_generator(train_gen,
-                                      steps_per_epoch=100,epochs=25,
+                                      steps_per_epoch=100,epochs=125,
                                       validation_data=val_gen,
                                       validation_steps=50,
                                       callbacks=[checkpoint, tensorboard])
@@ -248,7 +248,7 @@ def run_model(backbone, preprocess_func, output, logs, opt='adam', act='relu'):
 
     hist, model = fit_model(model, train_generator, validation_generator, output, logs, 'init')
     draw_plots(hist, logs)
-    model = fine_tuning(model, base_model, 'block4_conv1')
+    model = fine_tuning(model, base_model, 'block5_conv1')
     model = compile_model(model, opt)
     hist, model = fit_model(model, train_generator, validation_generator, output, logs, 'fine')
     draw_plots(hist, logs)
