@@ -60,7 +60,7 @@ EPOCHS = 100
 STEPS_PER_EPOCH = NUM_TRAIN//BATCH_SIZE
 VALIDATION_STEPS = NUM_VAL//BATCH_SIZE
 
-def dataset_generator(preprocess_func):
+def dataset_generator():
 
     # create dataset generators
     train_datagen = ImageDataGenerator(
@@ -163,6 +163,9 @@ def compile_model(model, opt='adam'):
                       optimizer=Adam(lr=0.0001, decay=0.01),
                       metrics=['accuracy'])
 
+    if opt == 'autoenc':
+        model.compile(optimizer='adadelta', loss='binary_crossentropy')
+
     return model
 
 def fit_model(model, train_gen, val_gen, output_name, log_dir, steps='norm'):
@@ -215,20 +218,10 @@ def fit_model(model, train_gen, val_gen, output_name, log_dir, steps='norm'):
 
 def draw_plots(hist, logs):
 
-    acc = hist.history['acc']
-    val_acc = hist.history['val_acc']
     loss = hist.history['loss']
     val_loss = hist.history['val_loss']
 
-    epochs = range(len(acc))
-
-    plt.plot(epochs, acc, 'b', label='Training acc')
-    plt.plot(epochs, val_acc, 'r', label='Validation acc')
-    plt.title('Training and validation accuracy')
-    plt.legend()
-
-    plt.savefig(os.path.join('./logs', logs, 'acc.png'))
-    plt.figure()
+    epochs = range(len(loss))
 
     plt.plot(epochs, loss, 'b', label='Training loss')
     plt.plot(epochs, val_loss, 'r', label='Validation loss')
@@ -237,11 +230,11 @@ def draw_plots(hist, logs):
 
     plt.savefig(os.path.join('./logs', logs, 'loss.png'))
 
-def run_model(backbone, preprocess_func, output, logs, opt='adam', act='relu'):
+def run_model(backbone, output, logs, opt='adam', act='relu'):
 
     base_model = backbone(include_top=False, input_shape = (HEIGHT, WIDTH, 3), weights='imagenet')
     model = create_fclayer(base_model)
-    train_datagen, validation_datagen = dataset_generator(preprocess_func)
+    train_datagen, validation_datagen = dataset_generator()
     train_generator, validation_generator = dir_generator(train_datagen, validation_datagen)
     model = compile_model(model, opt)
     model.summary()
@@ -257,7 +250,7 @@ if __name__ == '__main__':
 
     start_time = time.time()
     # run_model(ResNet50, preprocess_resnet, 'resnet50_pets.h5', 'resnet50_pets')
-    run_model(DenseNet169, preprocess_dense, 'vgg_mura_autoenc', 'vgg_mura_autoenc')
+    run_model(DenseNet169, 'vgg_mura_autoenc', 'vgg_mura_autoenc', opt='autoenc')
     end_time = time.time()
     print('Total time: {:.3f}'.format((end_time - start_time)/3600))
 
