@@ -249,8 +249,7 @@ def run_model(backbone, output, logs, opt='adam', act='relu'):
 if __name__ == '__main__':
 
     start_time = time.time()
-    # run_model(ResNet50, preprocess_resnet, 'resnet50_pets.h5', 'resnet50_pets')
-    run_model(DenseNet169, 'vgg_mura_autoenc', 'vgg_mura_autoenc', opt='autoenc')
+    run_model(VGG16, 'vgg_mura_autoenc', 'vgg_mura_autoenc', opt='autoenc')
     end_time = time.time()
     print('Total time: {:.3f}'.format((end_time - start_time)/3600))
 
