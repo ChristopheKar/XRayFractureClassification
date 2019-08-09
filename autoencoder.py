@@ -10,7 +10,7 @@ from keras.models import load_model
 from keras.models import Model, Sequential
 from keras.layers import Dense, GlobalAveragePooling2D, Dropout, BatchNormalization, Flatten
 from keras.layers import Input, Conv2D, MaxPooling2D, UpSampling2D
-from keras.optimizers import Adam
+from keras.optimizers import Adam, Adadelta
 from keras.applications.inception_v3 import InceptionV3
 from keras.applications.inception_v3 import preprocess_input as preprocess_inception
 from keras.applications.inception_resnet_v2 import InceptionResNetV2
@@ -164,7 +164,8 @@ def compile_model(model, opt='adam'):
                       metrics=['accuracy'])
 
     if opt == 'autoenc':
-        model.compile(optimizer='adadelta', loss='binary_crossentropy')
+        model.compile(optimizer=Adadelta(lr=1.0, rho=0.95, epsilon=None, decay=0.0),
+                      loss='binary_crossentropy')
 
     return model
 
