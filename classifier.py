@@ -139,6 +139,8 @@ def create_fclayer(conv_base):
 
 def fine_tuning(model, conv_base, training_layers):
 
+    conv_base.trainable = True
+
     for layer in conv_base.layers[:-training_layers]:
         layer.trainable = False
 
