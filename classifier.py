@@ -248,7 +248,7 @@ def run_model(backbone, preprocess_func, output, logs, opt='adam', act='relu'):
     model = compile_model(model, opt)
     model.summary()
     from shutil import copyfile
-    copyfile(os.path.getrealpath(__file__), './logs/train.py')
+    copyfile(os.path.realpath(__file__), './logs/train.py')
     hist, model = fit_model(model, train_generator, validation_generator, output, logs, 'init')
     draw_plots(hist, logs)
     model = fine_tuning(model, base_model, 19)
