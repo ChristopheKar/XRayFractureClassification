@@ -33,27 +33,35 @@ if 'user' in os.environ['HOME']:
     TRAIN_DIR = '/home/user/chris/datasets/wrist_fyp/split/train'
     VAL_DIR = '/home/user/chris/datasets/wrist_fyp/split/val'
 else:
-    # AUB WRIST
+    # # AUB WRIST
     # TRAIN_DIR = '/home/ubuntu/wrist/datasets/split/train'
     # VAL_DIR = '/home/ubuntu/wrist/datasets/split/val'
-    # MURA WRIST
+    # # MURA WRIST
     # TRAIN_DIR = '/home/ubuntu/wrist/datasets/MURA_wrist/train'
     # VAL_DIR = '/home/ubuntu/wrist/datasets/MURA_wrist/valid'
-    # MURA ALL
-    TRAIN_DIR = '/home/ubuntu/wrist/datasets/MURA_classification/train'
-    VAL_DIR = '/home/ubuntu/wrist/datasets/MURA_classification/valid'
+    # # MURA ALL
+    # TRAIN_DIR = '/home/ubuntu/wrist/datasets/MURA_classification/train'
+    # VAL_DIR = '/home/ubuntu/wrist/datasets/MURA_classification/valid'
+    # PETS
+    TRAIN_DIR = '/home/ubuntu/wrist/datasets/PetImages/train'
+    VAL_DIR = '/home/ubuntu/wrist/datasets/PetImages/valid'
+
 
 # # AUB FYP SPLIT
 # NUM_TRAIN = 15220
 # NUM_VAL = 1904
 
-# MURA
-NUM_TRAIN = 36804
-NUM_VAL = 3197
+# # MURA
+# NUM_TRAIN = 36804
+# NUM_VAL = 3197
 
-# MURA WRIST
+# # MURA WRIST
 # NUM_TRAIN = 9748
 # NUM_VAL = 679
+
+# PETS
+NUM_TRAIN = 24946
+NUM_VAL = 400
 
 # set training parameters
 EPOCHS = 100
@@ -250,7 +258,7 @@ def run_model(backbone, output, logs, opt='adam', act='relu'):
 if __name__ == '__main__':
 
     start_time = time.time()
-    run_model(VGG16, 'vgg_mura_autoenc', 'vgg_mura_autoenc', opt='autoenc')
+    run_model(VGG16, 'vgg_pets_autoenc.h5', 'vgg_pets_autoenc', opt='autoenc')
     end_time = time.time()
     print('Total time: {:.3f}'.format((end_time - start_time)/3600))
 
