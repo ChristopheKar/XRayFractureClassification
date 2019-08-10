@@ -117,7 +117,7 @@ def create_fclayer(conv_base):
     # model.add(Dropout(0.4))
     # model.add(Dense(64, activation='relu'))
     # model.add(Dense(32, activation='relu'))
-    model.add(Dense(CLASSES, activation='softmax'))
+    model.add(Dense(CLASSES, activation='sigmoid'))
 
     return model
 
@@ -140,7 +140,7 @@ def create_fclayer(conv_base):
 def fine_tuning(model, conv_base, training_layers):
 
     for layer in conv_base.layers[:-training_layers]:
-        layer.training = False
+        layer.trainable = False
 
     return model
 
@@ -235,9 +235,6 @@ def draw_plots(hist, logs):
     plt.legend()
 
     plt.savefig(os.path.join('./logs', logs, 'loss.png'))
-
-    from shutil import copyfile
-    copyfile(os.path.getrealpath(__file__), './logs/train.py')
 
 def run_model(backbone, preprocess_func, output, logs, opt='adam', act='relu'):
 
