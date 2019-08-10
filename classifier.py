@@ -248,7 +248,7 @@ def run_model(backbone, preprocess_func, output, logs, opt='adam', act='relu'):
     copyfile(os.path.realpath(__file__), './logs/train.py')
     hist, model = fit_model(model, train_generator, validation_generator, output, logs, 'init')
     draw_plots(hist, logs)
-    model = fine_tuning(model, base_model, 19)
+    model = fine_tuning(model, base_model, 10)
     model = compile_model(model, opt)
     hist, model = fit_model(model, train_generator, validation_generator, output, logs, 'fine')
     draw_plots(hist, logs)
@@ -258,6 +258,6 @@ if __name__ == '__main__':
     start_time = time.time()
 
     # run_model(ResNet50, preprocess_resnet, 'resnet50_pets.h5', 'resnet50_pets')
-    run_model(DenseNet169, preprocess_dense, 'd169_finetune19.h5', 'd169_finetune19')
+    run_model(DenseNet169, preprocess_dense, 'd169_finetune10.h5', 'd169_finetune10')
     end_time = time.time()
     print('Total time: {:.3f}'.format((end_time - start_time)/3600))
