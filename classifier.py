@@ -34,28 +34,27 @@ from keras.callbacks import ModelCheckpoint, LearningRateScheduler, TensorBoard,
 CLASSES = 1
 WIDTH, HEIGHT = 224, 224
 BATCH_SIZE = 16
-if 'user' in os.environ['HOME']:
-    TRAIN_DIR = '/home/user/chris/datasets/wrist_fyp/split/train'
-    VAL_DIR = '/home/user/chris/datasets/wrist_fyp/split/val'
-else:
-    # AUB WRIST
-    # TRAIN_DIR = '/home/ubuntu/wrist/datasets/split/train'
-    # VAL_DIR = '/home/ubuntu/wrist/datasets/split/val'
-    # MURA WRIST
+DATASET = 'AUB_WRIST'
+# DATASET = 'MURA_ALL'
+# DATASET = 'MURA_WRIST'
+
+if DATASET == 'AUB_WRIST':
+    TRAIN_DIR = '/home/ubuntu/wrist/datasets/split/train'
+    VAL_DIR = '/home/ubuntu/wrist/datasets/split/val'
+    NUM_TRAIN = 15220
+    NUM_VAL = 1904
+
+if DATASET == 'MURA_ALL':
+    TRAIN_DIR = '/home/ubuntu/wrist/datasets/MURA_classification/train'
+    VAL_DIR = '/home/ubuntu/wrist/datasets/MURA_classification/valid'
+    NUM_TRAIN = 36804
+    NUM_VAL = 3197
+
+if DATASET == 'MURA_WRIST':
     TRAIN_DIR = '/home/ubuntu/wrist/datasets/MURA_wrist/train'
     VAL_DIR = '/home/ubuntu/wrist/datasets/MURA_wrist/valid'
-
-# AUB FYP SPLIT
-# NUM_TRAIN = 15220
-# NUM_VAL = 1904
-
-# MURA
-# NUM_TRAIN = 36804
-# NUM_VAL = 3197
-
-# MURA WRIST
-NUM_TRAIN = 9748
-NUM_VAL = 679
+    NUM_TRAIN = 9748
+    NUM_VAL = 679
 
 # set training parameters
 EPOCHS = 100
@@ -122,19 +121,26 @@ def create_fclayer(conv_base):
 
     return model
 
-def fine_tuning(model, conv_base, layer_name):
+# def fine_tuning(model, conv_base, layer_name):
+#
+#     conv_base.trainable = True
+#     set_trainable = False
+#
+#     for layer in conv_base.layers:
+#
+#         if layer.name == layer_name:
+#             set_trainable = True
+#         if set_trainable:
+#             layer.trainable = True
+#         else:
+#             layer.trainable = False
+#
+#     return model
 
-    conv_base.trainable = True
-    set_trainable = False
+def fine_tuning(model, conv_base, training_layers):
 
-    for layer in conv_base.layers:
-
-        if layer.name == layer_name:
-            set_trainable = True
-        if set_trainable:
-            layer.trainable = True
-        else:
-            layer.trainable = False
+    for layer in conv_base.layers[:-training_layers]:
+        layer.training = False
 
     return model
 
@@ -230,6 +236,9 @@ def draw_plots(hist, logs):
 
     plt.savefig(os.path.join('./logs', logs, 'loss.png'))
 
+    from shutil import copyfile
+    copyfile(os.path.getrealpath(__file__), './logs/train.py')
+
 def run_model(backbone, preprocess_func, output, logs, opt='adam', act='relu'):
 
     base_model = backbone(include_top=False, input_shape = (HEIGHT, WIDTH, 3), weights='imagenet')
@@ -241,7 +250,7 @@ def run_model(backbone, preprocess_func, output, logs, opt='adam', act='relu'):
 
     hist, model = fit_model(model, train_generator, validation_generator, output, logs, 'init')
     draw_plots(hist, logs)
-    model = fine_tuning(model, base_model, 'block5_conv1')
+    model = fine_tuning(model, base_model, 19)
     model = compile_model(model, opt)
     hist, model = fit_model(model, train_generator, validation_generator, output, logs, 'fine')
     draw_plots(hist, logs)
@@ -250,6 +259,6 @@ if __name__ == '__main__':
 
     start_time = time.time()
     # run_model(ResNet50, preprocess_resnet, 'resnet50_pets.h5', 'resnet50_pets')
-    run_model(DenseNet169, preprocess_dense, 'd169_mura_wrist_4fc.h5', 'd169_mura_wrist_4fc')
+    run_model(DensNet169, preprocess_dense, 'd169_finetune19.h5', 'd169_finetune19')
     end_time = time.time()
     print('Total time: {:.3f}'.format((end_time - start_time)/3600))
