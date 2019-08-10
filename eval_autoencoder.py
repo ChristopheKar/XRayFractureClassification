@@ -20,4 +20,4 @@ if __name__ == '__main__':
   img_path = '/home/ubuntu/wrist/datasets/MURA_classification/valid/wrist/image1763.png'
   new_image = load_image(img_path)
   pred = model.predict(new_image)
-  imsave('test.png', pred[0])
+  imsave('test.png', pred[0]*255.)
