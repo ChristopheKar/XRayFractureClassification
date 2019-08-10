@@ -44,7 +44,7 @@ else:
     # VAL_DIR = '/home/ubuntu/wrist/datasets/MURA_classification/valid'
     # PETS
     TRAIN_DIR = '/home/ubuntu/wrist/datasets/PetImages/train'
-    VAL_DIR = '/home/ubuntu/wrist/datasets/PetImages/valid'
+    VAL_DIR = '/home/ubuntu/wrist/datasets/PetImages/val'
 
 
 # # AUB FYP SPLIT
