@@ -24,6 +24,8 @@ from keras.applications.vgg16 import VGG16
 from keras.applications.densenet import DenseNet169, DenseNet201
 from keras_preprocessing.image import ImageDataGenerator
 from keras.callbacks import ModelCheckpoint, LearningRateScheduler, TensorBoard, EarlyStopping, ReduceLROnPlateau
+from losses import binary_focal_loss
+
 
 # set dataset parameters
 # CLASSES = 7
@@ -149,7 +151,7 @@ def step_decay(epoch):
 	lrate = initial_lrate * math.pow(drop, math.floor((1+epoch)/epochs_drop))
 	return lrate
 
-def compile_model(model, lrate=0.0001):
+def compile_model(model, loss='default', lrate=0.0001):
 
     adam = Adam(lr=lrate,
                 beta_1=0.9,
@@ -158,8 +160,12 @@ def compile_model(model, lrate=0.0001):
                 decay=0.0,
                 amsgrad=True)
 
+    if loss == 'default':
+        loss_f = 'binary_crossentropy'
+    if loss == 'focal':
+        loss_f = [binary_focal_loss(alpha=.25, gamma=2)]
 
-    model.compile(loss='binary_crossentropy',
+    model.compile(loss=loss_f,
                   optimizer=adam,
                   metrics=['accuracy'])
 
@@ -251,20 +257,20 @@ def run_model(backbone, output, logs, opt='adam', act='relu'):
     model = create_fclayer(base_model)
     train_datagen, validation_datagen = dataset_generator()
     train_generator, validation_generator = dir_generator(train_datagen, validation_datagen)
-    model = compile_model(model, opt)
+    model = compile_model(model, loss='focal')
     model.summary()
     from shutil import copyfile
     copyfile(os.path.realpath(__file__), './logs/train.py')
     hist, model = fit_model(model, train_generator, validation_generator, output, logs, 'init')
     draw_plots(hist, logs)
     model = fine_tuning(model, base_model, 4)
-    model = compile_model(model, opt)
+    model = compile_model(model, loss='focal')
     hist, model = fit_model(model, train_generator, validation_generator, output, logs, 'fine')
     draw_plots(hist, logs)
 
 if __name__ == '__main__':
 
     start_time = time.time()
-    run_model(DenseNet169, 'd169_finetune4.h5', 'd169_finetune4')
+    run_model(DenseNet169, 'd169_finetune4_focal_lr.h5', 'd169_finetune4_focal_lr')
     end_time = time.time()
     print('Total time: {:.3f}'.format((end_time - start_time)/3600))
