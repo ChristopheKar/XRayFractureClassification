@@ -17,17 +17,13 @@ from keras.models import Model, Sequential
 from keras.layers import Dense, GlobalAveragePooling2D, Dropout, BatchNormalization, Flatten
 from keras.optimizers import Adam
 from keras.applications.inception_v3 import InceptionV3
-from keras.applications.inception_v3 import preprocess_input as preprocess_inception
 from keras.applications.inception_resnet_v2 import InceptionResNetV2
 from keras.applications.resnet50 import ResNet50
-from keras.applications.resnet50 import preprocess_input as preprocess_resnet
 from keras.applications.nasnet import NASNetLarge, NASNetMobile
 from keras.applications.vgg16 import VGG16
-from keras.applications.vgg16 import preprocess_input as preprocess_vgg
 from keras.applications.densenet import DenseNet169, DenseNet201
-from keras.applications.densenet import preprocess_input as preprocess_dense
 from keras_preprocessing.image import ImageDataGenerator
-from keras.callbacks import ModelCheckpoint, LearningRateScheduler, TensorBoard, EarlyStopping
+from keras.callbacks import ModelCheckpoint, LearningRateScheduler, TensorBoard, EarlyStopping, ReduceLROnPlateau
 
 # set dataset parameters
 # CLASSES = 7
@@ -61,7 +57,7 @@ EPOCHS = 100
 STEPS_PER_EPOCH = NUM_TRAIN//BATCH_SIZE
 VALIDATION_STEPS = NUM_VAL//BATCH_SIZE
 
-def dataset_generator(preprocess_func):
+def dataset_generator():
 
     # create dataset generators
     train_datagen = ImageDataGenerator(
@@ -153,16 +149,19 @@ def step_decay(epoch):
 	lrate = initial_lrate * math.pow(drop, math.floor((1+epoch)/epochs_drop))
 	return lrate
 
-def compile_model(model, opt='adam'):
+def compile_model(model, lrate=0.0001):
 
-    if opt == 'rmsprop':
-        model.compile(loss='binary_crossentropy',
-                      optimizer='rmsprop',
-                      metrics=['accuracy'])
-    if opt == 'adam':
-        model.compile(loss='binary_crossentropy',
-                      optimizer=Adam(lr=0.0001, decay=0.01),
-                      metrics=['accuracy'])
+    adam = Adam(lr=lrate,
+                beta_1=0.9,
+                beta_2=0.999,
+                epsilon=None,
+                decay=0.0,
+                amsgrad=True)
+
+
+    model.compile(loss='binary_crossentropy',
+                  optimizer=adam,
+                  metrics=['accuracy'])
 
     return model
 
@@ -170,6 +169,14 @@ def fit_model(model, train_gen, val_gen, output_name, log_dir, steps='norm'):
 
     model_file = os.path.join('models', output_name)
     log_dir = os.path.join('./logs', log_dir)
+
+    # reduce learning rate on plateau
+    reduce_lr = ReduceLROnPlateau(monitor='val_loss',
+                                  factor=0.1,
+                                  patience=10,
+                                  min_delta=0.0001,
+                                  verbose=1,
+                                  min_lr=0.0000001)
 
     # save best models
     checkpoint = ModelCheckpoint(model_file,
@@ -195,13 +202,13 @@ def fit_model(model, train_gen, val_gen, output_name, log_dir, steps='norm'):
                                       steps_per_epoch=STEPS_PER_EPOCH,
                                       validation_data=val_gen,
                                       validation_steps=VALIDATION_STEPS,
-                                      callbacks=[checkpoint, tensorboard])
+                                      callbacks=[checkpoint, tensorboard, reduce_lr])
     elif steps == 'init':
         history = model.fit_generator(train_gen,
                                       steps_per_epoch=100,epochs=25,
                                       validation_data=val_gen,
                                       validation_steps=50,
-                                      callbacks=[checkpoint, tensorboard])
+                                      callbacks=[checkpoint, tensorboard, reduce_lr])
 
     elif steps == 'fine':
 
@@ -210,7 +217,7 @@ def fit_model(model, train_gen, val_gen, output_name, log_dir, steps='norm'):
                                        epochs=150,
                                        validation_data=val_gen,
                                        validation_steps=50,
-                                       callbacks=[checkpoint, tensorboard])
+                                       callbacks=[checkpoint, tensorboard, reduce_lr])
 
     return history, model
 
@@ -238,11 +245,11 @@ def draw_plots(hist, logs):
 
     plt.savefig(os.path.join('./logs', logs, 'loss.png'))
 
-def run_model(backbone, preprocess_func, output, logs, opt='adam', act='relu'):
+def run_model(backbone, output, logs, opt='adam', act='relu'):
 
     base_model = backbone(include_top=False, input_shape = (HEIGHT, WIDTH, 3), weights='imagenet')
     model = create_fclayer(base_model)
-    train_datagen, validation_datagen = dataset_generator(preprocess_func)
+    train_datagen, validation_datagen = dataset_generator()
     train_generator, validation_generator = dir_generator(train_datagen, validation_datagen)
     model = compile_model(model, opt)
     model.summary()
@@ -258,8 +265,6 @@ def run_model(backbone, preprocess_func, output, logs, opt='adam', act='relu'):
 if __name__ == '__main__':
 
     start_time = time.time()
-
-    # run_model(ResNet50, preprocess_resnet, 'resnet50_pets.h5', 'resnet50_pets')
-    run_model(DenseNet169, preprocess_dense, 'd169_finetune4.h5', 'd169_finetune4')
+    run_model(DenseNet169, 'd169_finetune4.h5', 'd169_finetune4')
     end_time = time.time()
     print('Total time: {:.3f}'.format((end_time - start_time)/3600))
