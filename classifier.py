@@ -204,7 +204,7 @@ def fit_model(model, train_gen, val_gen, output_name, log_dir, steps='norm'):
 
         history = model.fit_generator(train_gen,
                                        steps_per_epoch=150,
-                                       epochs=150,
+                                       epochs=125,
                                        validation_data=val_gen,
                                        validation_steps=50,
                                        callbacks=[checkpoint, tensorboard, reduce_lr])
@@ -247,7 +247,7 @@ def run_model(backbone, output, logs, loss='default'):
     copyfile(os.path.realpath(__file__), './logs/train.py')
     hist, model = fit_model(model, train_generator, validation_generator, output, logs, 'init')
     draw_plots(hist, logs)
-    model = fine_tuning(model, base_model, 4)
+    model = fine_tuning(model, base_model, 8)
     model = compile_model(model, loss=loss)
     hist, model = fit_model(model, train_generator, validation_generator, output, logs, 'fine')
     draw_plots(hist, logs)
@@ -255,6 +255,6 @@ def run_model(backbone, output, logs, loss='default'):
 if __name__ == '__main__':
 
     start_time = time.time()
-    run_model(DenseNet169, 'd169_finetune4.h5', 'd169_finetune4', 'default')
+    run_model(DenseNet169, 'd169_finetune8.h5', 'd169_finetune8', 'default')
     end_time = time.time()
     print('Total time: {:.3f}'.format((end_time - start_time)/3600))
