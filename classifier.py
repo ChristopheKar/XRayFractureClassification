@@ -119,22 +119,6 @@ def create_fclayer(conv_base):
 
     return model
 
-# def fine_tuning(model, conv_base, layer_name):
-#
-#     conv_base.trainable = True
-#     set_trainable = False
-#
-#     for layer in conv_base.layers:
-#
-#         if layer.name == layer_name:
-#             set_trainable = True
-#         if set_trainable:
-#             layer.trainable = True
-#         else:
-#             layer.trainable = False
-#
-#     return model
-
 def fine_tuning(model, conv_base, training_layers):
 
     conv_base.trainable = True
@@ -179,7 +163,7 @@ def fit_model(model, train_gen, val_gen, output_name, log_dir, steps='norm'):
     # reduce learning rate on plateau
     reduce_lr = ReduceLROnPlateau(monitor='val_loss',
                                   factor=0.1,
-                                  patience=10,
+                                  patience=3,
                                   min_delta=0.0001,
                                   verbose=1,
                                   min_lr=0.0000001)
@@ -251,26 +235,26 @@ def draw_plots(hist, logs):
 
     plt.savefig(os.path.join('./logs', logs, 'loss.png'))
 
-def run_model(backbone, output, logs, opt='adam', act='relu'):
+def run_model(backbone, output, logs, loss='default'):
 
     base_model = backbone(include_top=False, input_shape = (HEIGHT, WIDTH, 3), weights='imagenet')
     model = create_fclayer(base_model)
     train_datagen, validation_datagen = dataset_generator()
     train_generator, validation_generator = dir_generator(train_datagen, validation_datagen)
-    model = compile_model(model, loss='focal')
+    model = compile_model(model, loss=loss)
     model.summary()
     from shutil import copyfile
     copyfile(os.path.realpath(__file__), './logs/train.py')
     hist, model = fit_model(model, train_generator, validation_generator, output, logs, 'init')
     draw_plots(hist, logs)
     model = fine_tuning(model, base_model, 4)
-    model = compile_model(model, loss='focal')
+    model = compile_model(model, loss=loss)
     hist, model = fit_model(model, train_generator, validation_generator, output, logs, 'fine')
     draw_plots(hist, logs)
 
 if __name__ == '__main__':
 
     start_time = time.time()
-    run_model(DenseNet169, 'd169_finetune4_focal_lr.h5', 'd169_finetune4_focal_lr')
+    run_model(DenseNet169, 'd169_finetune4.h5', 'd169_finetune4', 'default')
     end_time = time.time()
     print('Total time: {:.3f}'.format((end_time - start_time)/3600))
