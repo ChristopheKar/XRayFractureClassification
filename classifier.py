@@ -30,8 +30,8 @@ from losses import binary_focal_loss, categorical_focal_loss
 # set dataset parameters
 WIDTH, HEIGHT = 224, 224
 BATCH_SIZE = 16
-# DATASET = 'AUB_WRIST'
-DATASET = 'MURA_ALL'
+DATASET = 'AUB_WRIST'
+# DATASET = 'MURA_ALL'
 # DATASET = 'MURA_WRIST'
 
 if DATASET == 'AUB_WRIST':
@@ -272,12 +272,12 @@ def draw_plots(hist, logs):
 
 def run_model(backbone, output, logs, loss='default'):
 
-    base_model = backbone(include_top=False, input_shape = (HEIGHT, WIDTH, 3), weights='imagenet')
+    # base_model = backbone(include_top=False, input_shape = (HEIGHT, WIDTH, 3), weights='imagenet')
 
-    # base_model = load_model(os.path.join(os.environ['HOME'], 'wrist/classification/models/d169_mura_class.h5'))
-    # for i in range(6):
-    #     base_model._layers.pop()
-    # base_model.summary()
+    base_model = load_model(os.path.join(os.environ['HOME'], 'wrist/classification/models/d169_mura_class.h5'))
+    for i in range(6):
+        base_model._layers.pop()
+    base_model.summary()
 
     model = create_fclayer(base_model)
     train_datagen, validation_datagen = dataset_generator()
@@ -295,8 +295,13 @@ def run_model(backbone, output, logs, loss='default'):
 
 if __name__ == '__main__':
 
-    start_time = time.time()
-    run_model(DenseNet169, 'd169_mura_class.h5', 'd169_mura_class', 'default')
-    # run_model(DenseNet169, 'd169_finetune19x2.h5', 'd169_finetune19x2', 'default')
-    end_time = time.time()
-    print('Total time: {:.3f}'.format((end_time - start_time)/3600))
+    from datetime import datetime, timedelta
+    in_2h = datetime.now() + timedleta(hours=2)
+    while True:
+        if datetime.now() > in_2h:
+            start_time = time.time()
+            # run_model(DenseNet169, 'd169_mura_class.h5', 'd169_mura_class', 'default')
+            run_model(DenseNet169, 'd169_finetune19x2.h5', 'd169_finetune19x2', 'default')
+            end_time = time.time()
+            print('Total time: {:.3f}'.format((end_time - start_time)/3600))
+            break
