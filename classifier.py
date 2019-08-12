@@ -126,7 +126,7 @@ def create_fclayer(conv_base):
     conv_base.trainable = False
 
     model = Sequential()
-    model.add(conv_base)
+    model.add(conv_base.layers[0])
     model.add(Flatten())
     model.add(Dense(1024, activation='relu'))
     model.add(Dense(512, activation='relu'))
@@ -272,12 +272,12 @@ def draw_plots(hist, logs):
 
 def run_model(backbone, output, logs, loss='default'):
 
-    base_model = backbone(include_top=False, input_shape = (HEIGHT, WIDTH, 3), weights='imagenet')
+    # base_model = backbone(include_top=False, input_shape = (HEIGHT, WIDTH, 3), weights='imagenet')
 
-    # base_model = load_model(os.path.join(os.environ['HOME'], 'wrist/classification/models/d169_mura_class.h5'))
-    # for i in range(6):
-    #     base_model._layers.pop()
-    # base_model.summary()
+    base_model = load_model(os.path.join(os.environ['HOME'], 'wrist/classification/models/d169_mura_class.h5'))
+    for i in range(6):
+        base_model._layers.pop()
+    base_model.summary()
 
     model = create_fclayer(base_model)
     train_datagen, validation_datagen = dataset_generator()
@@ -288,7 +288,7 @@ def run_model(backbone, output, logs, loss='default'):
     copyfile(os.path.realpath(__file__), './logs/train.py')
     hist, model = fit_model(model, train_generator, validation_generator, output, logs, 'init')
     draw_plots(hist, logs)
-    model = fine_tuning(model, base_model, 8)
+    model = fine_tuning(model, base_model, 19)
     model = compile_model(model, loss=loss)
     hist, model = fit_model(model, train_generator, validation_generator, output, logs, 'fine')
     draw_plots(hist, logs)
