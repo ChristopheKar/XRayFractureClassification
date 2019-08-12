@@ -288,21 +288,15 @@ def run_model(backbone, output, logs, loss='default'):
     copyfile(os.path.realpath(__file__), './logs/train.py')
     hist, model = fit_model(model, train_generator, validation_generator, output, logs, 'init')
     draw_plots(hist, logs)
-    model = fine_tuning(model, base_model, 19)
+    model = fine_tuning(model, base_model, 8)
     model = compile_model(model, loss=loss)
     hist, model = fit_model(model, train_generator, validation_generator, output, logs, 'fine')
     draw_plots(hist, logs)
 
 if __name__ == '__main__':
 
-    from datetime import datetime, timedelta
-    in_2h = datetime.now() + timedelta(hours=2)
-    while True:
-        if datetime.now() > in_2h:
-            start_time = time.time()
-            # run_model(DenseNet169, 'd169_mura_class.h5', 'd169_mura_class', 'default')
-            run_model(DenseNet169, 'd169_finetune19x2.h5', 'd169_finetune19x2', 'default')
-            end_time = time.time()
-            print('Total time: {:.3f}'.format((end_time - start_time)/3600))
-            break
-        time.sleep(100)
+    start_time = time.time()
+    # run_model(DenseNet169, 'd169_mura_class.h5', 'd169_mura_class', 'default')
+    run_model(DenseNet169, 'd169_finetune19x2.h5', 'd169_finetune19x2', 'default')
+    end_time = time.time()
+    print('Total time: {:.3f}'.format((end_time - start_time)/3600))
