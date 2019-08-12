@@ -32,8 +32,8 @@ from losses import binary_focal_loss
 CLASSES = 1
 WIDTH, HEIGHT = 224, 224
 BATCH_SIZE = 16
-DATASET = 'AUB_WRIST'
-# DATASET = 'MURA_ALL'
+# DATASET = 'AUB_WRIST'
+DATASET = 'MURA_ALL'
 # DATASET = 'MURA_WRIST'
 
 if DATASET == 'AUB_WRIST':
@@ -255,6 +255,6 @@ def run_model(backbone, output, logs, loss='default'):
 if __name__ == '__main__':
 
     start_time = time.time()
-    run_model(DenseNet169, 'd169_finetune19.h5', 'd169_finetune19', 'default')
+    run_model(DenseNet169, 'd169_mura_class.h5', 'd169_mura_class', 'default')
     end_time = time.time()
     print('Total time: {:.3f}'.format((end_time - start_time)/3600))
