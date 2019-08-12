@@ -24,12 +24,10 @@ from keras.applications.vgg16 import VGG16
 from keras.applications.densenet import DenseNet169, DenseNet201
 from keras_preprocessing.image import ImageDataGenerator
 from keras.callbacks import ModelCheckpoint, LearningRateScheduler, TensorBoard, EarlyStopping, ReduceLROnPlateau
-from losses import binary_focal_loss
+from losses import binary_focal_loss, categorical_focal_loss
 
 
 # set dataset parameters
-# CLASSES = 7
-CLASSES = 1
 WIDTH, HEIGHT = 224, 224
 BATCH_SIZE = 16
 # DATASET = 'AUB_WRIST'
@@ -41,18 +39,24 @@ if DATASET == 'AUB_WRIST':
     VAL_DIR = '/home/ubuntu/wrist/datasets/split/val'
     NUM_TRAIN = 15220
     NUM_VAL = 1904
+    CLASSES = 1
+
 
 if DATASET == 'MURA_ALL':
     TRAIN_DIR = '/home/ubuntu/wrist/datasets/MURA_classification/train'
     VAL_DIR = '/home/ubuntu/wrist/datasets/MURA_classification/valid'
     NUM_TRAIN = 36804
     NUM_VAL = 3197
+    CLASSES = 7
+
 
 if DATASET == 'MURA_WRIST':
     TRAIN_DIR = '/home/ubuntu/wrist/datasets/MURA_wrist/train'
     VAL_DIR = '/home/ubuntu/wrist/datasets/MURA_wrist/valid'
     NUM_TRAIN = 9748
     NUM_VAL = 679
+    CLASSES = 1
+
 
 # set training parameters
 EPOCHS = 100
@@ -86,17 +90,34 @@ def dataset_generator():
 
 def dir_generator(train_datagen, validation_datagen):
 
-    train_generator = train_datagen.flow_from_directory(
-        TRAIN_DIR,
-        target_size = (HEIGHT, WIDTH),
-        batch_size = BATCH_SIZE,
-        class_mode = 'binary')
+    if CLASSES == 1:
 
-    validation_generator = validation_datagen.flow_from_directory(
-        VAL_DIR,
-        target_size = (HEIGHT, WIDTH),
-        batch_size = BATCH_SIZE,
-        class_mode = 'binary')
+        train_generator = train_datagen.flow_from_directory(
+            TRAIN_DIR,
+            target_size = (HEIGHT, WIDTH),
+            batch_size = BATCH_SIZE,
+            class_mode = 'binary')
+
+        validation_generator = validation_datagen.flow_from_directory(
+            VAL_DIR,
+            target_size = (HEIGHT, WIDTH),
+            batch_size = BATCH_SIZE,
+            class_mode = 'binary')
+
+    elif CLASSES > 1:
+
+        train_generator = train_datagen.flow_from_directory(
+            TRAIN_DIR,
+            target_size = (HEIGHT, WIDTH),
+            batch_size = BATCH_SIZE,
+            class_mode = 'categorical')
+
+        validation_generator = validation_datagen.flow_from_directory(
+            VAL_DIR,
+            target_size = (HEIGHT, WIDTH),
+            batch_size = BATCH_SIZE,
+            class_mode = 'categorical')
+
 
     return train_generator, validation_generator
 
@@ -115,7 +136,10 @@ def create_fclayer(conv_base):
     # model.add(Dropout(0.4))
     # model.add(Dense(64, activation='relu'))
     # model.add(Dense(32, activation='relu'))
-    model.add(Dense(CLASSES, activation='sigmoid'))
+    if CLASSES == 1:
+        model.add(Dense(CLASSES, activation='sigmoid'))
+    elif CLASSES > 1:
+        model.add(Dense(CLASSES, activation='softmax'))
 
     return model
 
@@ -147,10 +171,14 @@ def compile_model(model, loss='default', lrate=0.0001):
                 decay=0.0,
                 amsgrad=True)
 
-    if loss == 'default':
+    if loss == 'default' and CLASSES == 1:
         loss_f = 'binary_crossentropy'
-    if loss == 'focal':
+    if loss == 'default' and CLASSES > 1:
+        loss_f = 'categorical_crossentropy'
+    if loss == 'focal' and CLASSES == 1:
         loss_f = [binary_focal_loss(alpha=.25, gamma=2)]
+    if loss == 'focal' and CLASSES > 1:
+        loss_f = [categorical_focal_loss(alpha=.25, gamma=2)]
 
     model.compile(loss=loss_f,
                   optimizer=adam,
@@ -243,12 +271,12 @@ def draw_plots(hist, logs):
 
 def run_model(backbone, output, logs, loss='default'):
 
-    # base_model = backbone(include_top=False, input_shape = (HEIGHT, WIDTH, 3), weights='imagenet')
+    base_model = backbone(include_top=False, input_shape = (HEIGHT, WIDTH, 3), weights='imagenet')
 
-    base_model = load_model(os.path.join(os.environ['HOME'], 'wrist/classification/models/d169_mura_class.h5'))
-    for i in range(6):
-        base_model._layers.pop()
-    base_model.summary()
+    # base_model = load_model(os.path.join(os.environ['HOME'], 'wrist/classification/models/d169_mura_class.h5'))
+    # for i in range(6):
+    #     base_model._layers.pop()
+    # base_model.summary()
 
     model = create_fclayer(base_model)
     train_datagen, validation_datagen = dataset_generator()
@@ -267,6 +295,7 @@ def run_model(backbone, output, logs, loss='default'):
 if __name__ == '__main__':
 
     start_time = time.time()
-    run_model(DenseNet169, 'd169_finetune19x2.h5', 'd169_finetune19x2', 'default')
+    run_model(DenseNet169, 'd169_mura_class.h5', 'd169_mura_class', 'default')
+    # run_model(DenseNet169, 'd169_finetune19x2.h5', 'd169_finetune19x2', 'default')
     end_time = time.time()
     print('Total time: {:.3f}'.format((end_time - start_time)/3600))
