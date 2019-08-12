@@ -296,7 +296,7 @@ def run_model(backbone, output, logs, loss='default'):
 if __name__ == '__main__':
 
     from datetime import datetime, timedelta
-    in_2h = datetime.now() + timedleta(hours=2)
+    in_2h = datetime.now() + timedelta(hours=2)
     while True:
         if datetime.now() > in_2h:
             start_time = time.time()
@@ -305,3 +305,4 @@ if __name__ == '__main__':
             end_time = time.time()
             print('Total time: {:.3f}'.format((end_time - start_time)/3600))
             break
+        time.sleep(100)
