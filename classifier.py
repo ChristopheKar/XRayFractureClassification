@@ -153,14 +153,15 @@ def fine_tuning(model, conv_base, training_layers):
     return model
 
 def step_decay(epoch):
-	initial_lrate = 0.001
+
     min_lrate = 0.00000001
-	drop = 0.5
-	epochs_drop = 10.0
-	lrate = initial_lrate * math.pow(drop, math.floor((1+epoch)/epochs_drop))
+    initial_lrate = 0.001
+    drop = 0.5
+    epochs_drop = 10.0
+    lrate = initial_lrate * math.pow(drop, math.floor((1+epoch)/epochs_drop))
     if lrate < min_lrate:
         lrate = min_lrate
-	return lrate
+    return lrate
 
 def compile_model(model, loss='default', lrate=0.0001):
 
