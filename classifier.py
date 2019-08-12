@@ -130,9 +130,12 @@ def fine_tuning(model, conv_base, training_layers):
 
 def step_decay(epoch):
 	initial_lrate = 0.001
+    min_lrate = 0.00000001
 	drop = 0.5
 	epochs_drop = 10.0
 	lrate = initial_lrate * math.pow(drop, math.floor((1+epoch)/epochs_drop))
+    if lrate < min_lrate:
+        lrate = min_lrate
 	return lrate
 
 def compile_model(model, loss='default', lrate=0.0001):
@@ -184,6 +187,9 @@ def fit_model(model, train_gen, val_gen, output_name, log_dir, steps='norm'):
 
     # set up learning rate schedule
     lrate = LearningRateScheduler(step_decay)
+
+    # Early Stopping on Plateau
+    es = EarlyStopping(monitor='val_acc', mode='max', verbose=1, patience=26)
 
     # fit model
     if steps == 'norm':
@@ -237,7 +243,13 @@ def draw_plots(hist, logs):
 
 def run_model(backbone, output, logs, loss='default'):
 
-    base_model = backbone(include_top=False, input_shape = (HEIGHT, WIDTH, 3), weights='imagenet')
+    # base_model = backbone(include_top=False, input_shape = (HEIGHT, WIDTH, 3), weights='imagenet')
+
+    base_model = load_model(os.path.join(os.environ['HOME'], 'wrist/classification/models/d169_mura_class.h5'))
+    for i in range(6):
+        base_model._layers.pop()
+    base_model.summary()
+
     model = create_fclayer(base_model)
     train_datagen, validation_datagen = dataset_generator()
     train_generator, validation_generator = dir_generator(train_datagen, validation_datagen)
@@ -255,6 +267,6 @@ def run_model(backbone, output, logs, loss='default'):
 if __name__ == '__main__':
 
     start_time = time.time()
-    run_model(DenseNet169, 'd169_mura_class.h5', 'd169_mura_class', 'default')
+    run_model(DenseNet169, 'd169_finetune19x2.h5', 'd169_finetune19x2', 'default')
     end_time = time.time()
     print('Total time: {:.3f}'.format((end_time - start_time)/3600))
