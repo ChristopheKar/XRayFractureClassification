@@ -21,7 +21,7 @@ from keras.applications.inception_resnet_v2 import InceptionResNetV2
 from keras.applications.resnet50 import ResNet50
 from keras.applications.nasnet import NASNetLarge, NASNetMobile
 from keras.applications.vgg16 import VGG16
-from keras.applications.densenet import DenseNet169, DenseNet201
+from keras.applications.densenet import DenseNet121, DenseNet169, DenseNet201
 from keras_preprocessing.image import ImageDataGenerator
 from keras.callbacks import ModelCheckpoint, LearningRateScheduler, TensorBoard, EarlyStopping, ReduceLROnPlateau
 from losses import binary_focal_loss, categorical_focal_loss
