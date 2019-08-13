@@ -201,7 +201,7 @@ def fit_model(model, train_gen, val_gen, output_name, log_dir, steps='norm'):
                                   patience=3,
                                   min_delta=0.0001,
                                   verbose=1,
-                                  min_lr=0.00000001)
+                                  min_lr=0.0000001)
 
     # save best models
     checkpoint = ModelCheckpoint(model_file,
@@ -236,7 +236,7 @@ def fit_model(model, train_gen, val_gen, output_name, log_dir, steps='norm'):
                                       steps_per_epoch=100,epochs=25,
                                       validation_data=val_gen,
                                       validation_steps=50,
-                                      callbacks=[checkpoint, tensorboard, reduce_lr])
+                                      callbacks=[checkpoint, reduce_lr])
 
     elif steps == 'fine':
 
@@ -275,14 +275,15 @@ def draw_plots(hist, logs):
 
 def run_model(backbone, output, logs, loss='default'):
 
-    base_model = backbone(include_top=False, input_shape = (HEIGHT, WIDTH, 3), weights='imagenet')
+    # base_model = backbone(include_top=False, input_shape = (HEIGHT, WIDTH, 3), weights='imagenet')
+    # model = create_fclayer(base_model)
 
-    # base_model = load_model(os.path.join(os.environ['HOME'], 'wrist/classification/models/d169_mura_class.h5'))
-    # for i in range(6):
-    #     base_model._layers.pop()
-    # base_model.summary()
+    base_model = load_model(os.path.join(os.environ['HOME'], 'wrist/classification/models/d169_mura_class.h5'))
+    for i in range(6):
+        base_model._layers.pop()
+    base_model.summary()
+    model = create_fclayer(base_model, True)
 
-    model = create_fclayer(base_model)
     train_datagen, validation_datagen = dataset_generator()
     train_generator, validation_generator = dir_generator(train_datagen, validation_datagen)
     model = compile_model(model, loss=loss)
@@ -290,7 +291,7 @@ def run_model(backbone, output, logs, loss='default'):
     from shutil import copyfile
     copyfile(os.path.realpath(__file__), './logs/train.py')
     hist, model = fit_model(model, train_generator, validation_generator, output, logs, 'init')
-    draw_plots(hist, logs)
+    # draw_plots(hist, logs)
     model = fine_tuning(model, base_model, 19)
     model = compile_model(model, loss=loss)
     hist, model = fit_model(model, train_generator, validation_generator, output, logs, 'fine')
@@ -300,6 +301,6 @@ if __name__ == '__main__':
 
     start_time = time.time()
     # run_model(DenseNet169, 'd169_mura_class.h5', 'd169_mura_class', 'default')
-    run_model(DenseNet121, 'd121_finetune8.h5', 'd121_finetune8', 'default')
+    run_model(DenseNet169, 'd169_finetune19_19_2.h5', 'd169_finetune19_19_2', 'default')
     end_time = time.time()
     print('Total time: {:.3f}'.format((end_time - start_time)/3600))
