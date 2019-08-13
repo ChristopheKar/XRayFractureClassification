@@ -121,12 +121,15 @@ def dir_generator(train_datagen, validation_datagen):
 
     return train_generator, validation_generator
 
-def create_fclayer(conv_base):
+def create_fclayer(conv_base, pre=False):
 
     conv_base.trainable = False
 
     model = Sequential()
-    model.add(conv_base.layers[0])
+    if pre is False:
+        model.add(conv_base)
+    else:
+        model.add(conv_base.layers[0])
     model.add(Flatten())
     model.add(Dense(1024, activation='relu'))
     model.add(Dense(512, activation='relu'))
@@ -272,12 +275,12 @@ def draw_plots(hist, logs):
 
 def run_model(backbone, output, logs, loss='default'):
 
-    # base_model = backbone(include_top=False, input_shape = (HEIGHT, WIDTH, 3), weights='imagenet')
+    base_model = backbone(include_top=False, input_shape = (HEIGHT, WIDTH, 3), weights='imagenet')
 
-    base_model = load_model(os.path.join(os.environ['HOME'], 'wrist/classification/models/d169_mura_class.h5'))
-    for i in range(6):
-        base_model._layers.pop()
-    base_model.summary()
+    # base_model = load_model(os.path.join(os.environ['HOME'], 'wrist/classification/models/d169_mura_class.h5'))
+    # for i in range(6):
+    #     base_model._layers.pop()
+    # base_model.summary()
 
     model = create_fclayer(base_model)
     train_datagen, validation_datagen = dataset_generator()
@@ -297,6 +300,6 @@ if __name__ == '__main__':
 
     start_time = time.time()
     # run_model(DenseNet169, 'd169_mura_class.h5', 'd169_mura_class', 'default')
-    run_model(DenseNet169, 'd169_finetune19_19.h5', 'd169_finetune19_19', 'default')
+    run_model(DenseNet121, 'd121_finetune8.h5', 'd121_finetune8', 'default')
     end_time = time.time()
     print('Total time: {:.3f}'.format((end_time - start_time)/3600))
