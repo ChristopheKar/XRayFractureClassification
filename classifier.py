@@ -30,9 +30,9 @@ from losses import binary_focal_loss, categorical_focal_loss
 # set dataset parameters
 WIDTH, HEIGHT = 224, 224
 BATCH_SIZE = 16
-DATASET = 'AUB_WRIST'
+# DATASET = 'AUB_WRIST'
 # DATASET = 'MURA_ALL'
-# DATASET = 'MURA_WRIST'
+DATASET = 'MURA_WRIST'
 
 if DATASET == 'AUB_WRIST':
     TRAIN_DIR = '/home/ubuntu/wrist/datasets/split/train'
@@ -233,7 +233,8 @@ def fit_model(model, train_gen, val_gen, output_name, log_dir, steps='norm'):
                                       callbacks=[checkpoint, tensorboard, reduce_lr])
     elif steps == 'init':
         history = model.fit_generator(train_gen,
-                                      steps_per_epoch=100,epochs=25,
+                                      steps_per_epoch=100,
+                                      epochs=25,
                                       validation_data=val_gen,
                                       validation_steps=50,
                                       callbacks=[checkpoint, reduce_lr])
@@ -241,11 +242,11 @@ def fit_model(model, train_gen, val_gen, output_name, log_dir, steps='norm'):
     elif steps == 'fine':
 
         history = model.fit_generator(train_gen,
-                                       steps_per_epoch=175,
-                                       epochs=125,
-                                       validation_data=val_gen,
-                                       validation_steps=50,
-                                       callbacks=[checkpoint, tensorboard, reduce_lr])
+                                      steps_per_epoch=150,
+                                      epochs=125,
+                                      validation_data=val_gen,
+                                      validation_steps=50,
+                                      callbacks=[checkpoint, tensorboard, reduce_lr])
 
     return history, model
 
@@ -275,14 +276,14 @@ def draw_plots(hist, logs):
 
 def run_model(backbone, output, logs, loss='default'):
 
-    base_model = backbone(include_top=False, input_shape = (HEIGHT, WIDTH, 3), weights=None)
-    model = create_fclayer(base_model)
+    # base_model = backbone(include_top=False, input_shape = (HEIGHT, WIDTH, 3), weights='imagenet')
+    # model = create_fclayer(base_model)
 
-    # base_model = load_model(os.path.join(os.environ['HOME'], 'wrist/classification/models/d169_mura_class_224.h5'))
-    # for i in range(6):
-    #     base_model._layers.pop()
-    # base_model.summary()
-    # model = create_fclayer(base_model, True)
+    base_model = load_model(os.path.join(os.environ['HOME'], 'wrist/classification/models/d169_mura_class_224.h5'))
+    for i in range(6):
+        base_model._layers.pop()
+    base_model.summary()
+    model = create_fclayer(base_model, True)
 
     train_datagen, validation_datagen = dataset_generator()
     train_generator, validation_generator = dir_generator(train_datagen, validation_datagen)
@@ -290,10 +291,10 @@ def run_model(backbone, output, logs, loss='default'):
     model.summary()
     from shutil import copyfile
     copyfile(os.path.realpath(__file__), './logs/train.py')
-    # hist, model = fit_model(model, train_generator, validation_generator, output, logs, 'init')
+    hist, model = fit_model(model, train_generator, validation_generator, output, logs, 'init')
     # draw_plots(hist, logs)
-    # model = fine_tuning(model, base_model, 19)
-    # model = compile_model(model, loss=loss)
+    model = fine_tuning(model, base_model, 19)
+    model = compile_model(model, loss=loss)
     hist, model = fit_model(model, train_generator, validation_generator, output, logs, 'fine')
     draw_plots(hist, logs)
 
@@ -301,6 +302,6 @@ if __name__ == '__main__':
 
     start_time = time.time()
     # run_model(DenseNet169, 'd169_mura_class_224.h5', 'd169_mura_class_224', 'default')
-    run_model(DenseNet169, 'd169_scratch.h5', 'd169_scratch', 'default')
+    run_model(DenseNet169, 'd169_mura_wrist224_19.h5', 'd169_mura_wrist224_19', 'default')
     end_time = time.time()
     print('Total time: {:.3f}'.format((end_time - start_time)/3600))
