@@ -59,9 +59,12 @@ if DATASET == 'MURA_WRIST':
 
 
 # set training parameters
-EPOCHS = 200
-STEPS_PER_EPOCH = NUM_TRAIN//BATCH_SIZE
-VALIDATION_STEPS = NUM_VAL//BATCH_SIZE
+# EPOCHS = 200
+# STEPS_PER_EPOCH = NUM_TRAIN//BATCH_SIZE
+# VALIDATION_STEPS = NUM_VAL//BATCH_SIZE
+EPOCHS = 125
+STEPS_PER_EPOCH = 150
+VALIDATION_STEPS = 50
 
 def dataset_generator():
 
@@ -261,6 +264,6 @@ def run_model(backbone, output, logs, loss='default'):
 if __name__ == '__main__':
 
     start_time = time.time()
-    run_model(DenseNet169, 'd169_mura_wrist_scratch.h5', 'd169_mura_wrist_scratch', 'default')
+    run_model(DenseNet169, 'd169_mura_wrist_scratch2.h5', 'd169_mura_wrist_scratch2', 'default')
     end_time = time.time()
     print('Total time: {:.3f}'.format((end_time - start_time)/3600))
