@@ -220,7 +220,7 @@ def fit_model(model, train_gen, val_gen, output_name, log_dir):
                                   steps_per_epoch=STEPS_PER_EPOCH,
                                   validation_data=val_gen,
                                   validation_steps=VALIDATION_STEPS,
-                                  callbacks=[checkpoint, tensorboard, reduce_lr, es])
+                                  callbacks=[checkpoint, tensorboard, reduce_lr])
 
     return history, model
 
