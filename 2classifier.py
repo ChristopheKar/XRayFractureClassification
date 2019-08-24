@@ -298,6 +298,6 @@ if __name__ == '__main__':
 
     start_time = time.time()
     # run_model(DenseNet169, 'd169_mura_class_224.h5', 'd169_mura_class_224', 'default')
-    run_model(DenseNet169, 'd169_finetune19_2.h5', 'd169_finetune224', 'default')
+    run_model(DenseNet169, 'd169_finetune19_2.h5', 'd169_finetune19_2', 'default')
     end_time = time.time()
     print('Total time: {:.3f}'.format((end_time - start_time)/3600))
