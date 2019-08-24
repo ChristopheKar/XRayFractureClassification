@@ -30,9 +30,9 @@ from losses import binary_focal_loss, categorical_focal_loss
 # set dataset parameters
 WIDTH, HEIGHT = 224, 224
 BATCH_SIZE = 16
-# DATASET = 'AUB_WRIST'
+DATASET = 'AUB_WRIST'
 # DATASET = 'MURA_ALL'
-DATASET = 'MURA_WRIST'
+# DATASET = 'MURA_WRIST'
 
 if DATASET == 'AUB_WRIST':
     TRAIN_DIR = '/home/ubuntu/wrist/datasets/split/train'
