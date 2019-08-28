@@ -31,8 +31,8 @@ from losses import binary_focal_loss, categorical_focal_loss
 WIDTH, HEIGHT = 224, 224
 BATCH_SIZE = 16
 # DATASET = 'AUB_WRIST'
-DATASET = 'MURA_ALL'
-# DATASET = 'MURA_WRIST'
+# DATASET = 'MURA_ALL'
+DATASET = 'MURA_WRIST'
 
 if DATASET == 'AUB_WRIST':
     TRAIN_DIR = '/home/ubuntu/wrist/datasets/split/train'
@@ -302,8 +302,8 @@ def run_model(backbone, output, logs, loss='default'):
     copyfile(os.path.realpath(__file__), './logs/train.py')
     hist, model = fit_model(model, train_generator, validation_generator, output, logs, 'init')
     # draw_plots(hist, logs)
-    model = fine_tuning(model, base_model, 143)
-    for layer in model.layers:
+    model = fine_tuning(model, base_model, 315)
+    for layer in model.layers[0].layers:
         print(layer.name, layer.trainable)
     model = compile_model(model, loss=loss)
     hist, model = fit_model(model, train_generator, validation_generator, output, logs, 'fine')
