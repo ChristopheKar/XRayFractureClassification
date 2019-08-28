@@ -146,12 +146,21 @@ def create_fclayer(conv_base, pre=False):
 
     return model
 
+# def fine_tuning(model, conv_base, training_layers):
+#
+#     conv_base.trainable = True
+#
+#     for layer in conv_base.layers[:-training_layers]:
+#         layer.trainable = False
+#
+#     return model
+
 def fine_tuning(model, conv_base, training_layers):
 
-    conv_base.trainable = True
-
-    for layer in conv_base.layers[:-training_layers]:
+    for layer in model.layers[:training_layers]:
         layer.trainable = False
+    for layer in model.layers[training_layers:]:
+        layer.trainable = True
 
     return model
 
@@ -293,7 +302,7 @@ def run_model(backbone, output, logs, loss='default'):
     copyfile(os.path.realpath(__file__), './logs/train.py')
     hist, model = fit_model(model, train_generator, validation_generator, output, logs, 'init')
     # draw_plots(hist, logs)
-    model = fine_tuning(model, base_model, 224)
+    model = fine_tuning(model, base_model, 143)
     model = compile_model(model, loss=loss)
     hist, model = fit_model(model, train_generator, validation_generator, output, logs, 'fine')
     draw_plots(hist, logs)
@@ -302,6 +311,6 @@ if __name__ == '__main__':
 
     start_time = time.time()
     # run_model(DenseNet169, 'd169_mura_class_224.h5', 'd169_mura_class_224', 'default')
-    run_model(DenseNet169, 'd169_mura_wrist_224.h5', 'd169_mura_wrist_224', 'default')
+    run_model(DenseNet169, 'd169_mura_wrist_+143.h5', 'd169_mura_wrist_+143', 'default')
     end_time = time.time()
     print('Total time: {:.3f}'.format((end_time - start_time)/3600))
