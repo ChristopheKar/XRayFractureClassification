@@ -31,8 +31,8 @@ from losses import binary_focal_loss, categorical_focal_loss
 WIDTH, HEIGHT = 224, 224
 BATCH_SIZE = 16
 # DATASET = 'AUB_WRIST'
-# DATASET = 'MURA_ALL'
-DATASET = 'MURA_WRIST'
+DATASET = 'MURA_ALL'
+# DATASET = 'MURA_WRIST'
 
 if DATASET == 'AUB_WRIST':
     TRAIN_DIR = '/home/ubuntu/wrist/datasets/split/train'
@@ -157,9 +157,9 @@ def create_fclayer(conv_base, pre=False):
 
 def fine_tuning(model, conv_base, training_layers):
 
-    for layer in model.layers[:training_layers]:
+    for layer in conv_base.layers[:training_layers]:
         layer.trainable = False
-    for layer in model.layers[training_layers:]:
+    for layer in conv_base.layers[training_layers:]:
         layer.trainable = True
 
     return model
@@ -310,7 +310,7 @@ def run_model(backbone, output, logs, loss='default'):
 if __name__ == '__main__':
 
     start_time = time.time()
-    # run_model(DenseNet169, 'd169_mura_class_224.h5', 'd169_mura_class_224', 'default')
-    run_model(DenseNet169, 'd169_mura_wrist_+143.h5', 'd169_mura_wrist_+143', 'default')
+    run_model(DenseNet169, 'd169_mura_class_+143.h5', 'd169_mura_class_+143', 'default')
+    # run_model(DenseNet169, 'd169_mura_wrist_+143.h5', 'd169_mura_wrist_+143', 'default')
     end_time = time.time()
     print('Total time: {:.3f}'.format((end_time - start_time)/3600))
