@@ -285,14 +285,14 @@ def draw_plots(hist, logs):
 
 def run_model(backbone, output, logs, loss='default'):
 
-    base_model = backbone(include_top=False, input_shape = (HEIGHT, WIDTH, 3), weights='imagenet')
-    model = create_fclayer(base_model)
+    # base_model = backbone(include_top=False, input_shape = (HEIGHT, WIDTH, 3), weights='imagenet')
+    # model = create_fclayer(base_model)
 
-    # base_model = load_model(os.path.join(os.environ['HOME'], 'wrist/classification/models/d169_mura_class_224.h5'))
-    # for i in range(6):
-    #     base_model._layers.pop()
-    # base_model.summary()
-    # model = create_fclayer(base_model, True)
+    base_model = load_model(os.path.join(os.environ['HOME'], 'wrist/classification/models/d169_mura_class_224.h5'))
+    for i in range(6):
+        base_model._layers.pop()
+    base_model.summary()
+    model = create_fclayer(base_model, True)
 
     train_datagen, validation_datagen = dataset_generator()
     train_generator, validation_generator = dir_generator(train_datagen, validation_datagen)
@@ -313,6 +313,6 @@ if __name__ == '__main__':
 
     start_time = time.time()
     # run_model(DenseNet169, 'd169_mura_class_+143.h5', 'd169_mura_class_+143', 'default')
-    run_model(DenseNet169, 'd169_mura_wrist_224v2.h5', 'd169_mura_wrist_224v2', 'default')
+    run_model(DenseNet169, 'd169_mura_wrist224_224.h5', 'd169_mura_wrist224_224', 'default')
     end_time = time.time()
     print('Total time: {:.3f}'.format((end_time - start_time)/3600))
