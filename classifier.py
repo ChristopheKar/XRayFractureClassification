@@ -12,6 +12,15 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 
+from sklearn.datasets import make_circles
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import precision_score
+from sklearn.metrics import recall_score
+from sklearn.metrics import f1_score
+from sklearn.metrics import cohen_kappa_score
+from sklearn.metrics import roc_auc_score
+from sklearn.metrics import confusion_matrix
+
 from keras.models import load_model
 from keras.models import Model, Sequential
 from keras.layers import Dense, GlobalAveragePooling2D, Dropout, BatchNormalization, Flatten
@@ -62,6 +71,64 @@ if DATASET == 'MURA_WRIST':
 EPOCHS = 200
 STEPS_PER_EPOCH = NUM_TRAIN//BATCH_SIZE
 VALIDATION_STEPS = NUM_VAL//BATCH_SIZE
+
+def evaluate(m, img_generator, nb_samples, logs, hist):
+
+    img_generator.reset()
+    classes = img_generator.classes[img_generator.index_array][0]
+    nb_samples = len(classes)
+
+    img_generator.reset()
+    Y_pred = m.predict_generator(img_generator, steps=nb_samples)
+    pred_prob = np.array([a[0] for a in Y_pred])
+    pred_classes = pred_prob.round().astype('int32')
+
+    metrics = ''
+    # accuracy: (tp + tn) / (p + n)
+    val_acc = accuracy_score(classes, pred_classes)
+    metrics = metrics + 'Accuracy: {:f}\n'.format(accuracy)
+    # precision tp / (tp + fp)
+    precision = precision_score(classes, pred_classes)
+    metrics = metrics + 'Precision: {:f}\n'.format(precision)
+    # recall: tp / (tp + fn)
+    recall = recall_score(classes, pred_classes)
+    metrics = metrics + 'Recall: {:f}\n'.format(recall)
+    # f1: 2 tp / (2 tp + fp + fn)
+    f1 = f1_score(classes, pred_classes)
+    metrics = metrics + 'F1 score: {:f}\n'.format(f1)
+    # kappa
+    kappa = cohen_kappa_score(classes, pred_classes)
+    metrics = metrics + 'Cohens Kappa: {:f}\n'.format(kappa)
+    # ROC AUC
+    auc = roc_auc_score(classes, pred_prob)
+    metrics = metrics + 'ROC AUC: {:f}\n'.format(auc)
+    # confusion matrix
+    matrix = confusion_matrix(classes, pred_classes)
+    metrics = metrics + 'Confusion Matrix:\n' + str(matrix)
+
+    acc = hist.history['acc']
+    val_acc = hist.history['val_acc']
+    loss = hist.history['loss']
+    val_loss = hist.history['val_loss']
+
+    metrics = metrics + 'Max Training Accuracy: {:f}'.format(max(acc))
+    metrics = metrics + 'Max Validation Accuracy: {:f}'.format(max(val_acc))
+    metrics = metrics + 'Min Training Loss: {:f}'.format(max(loss))
+    metrics = metrics + 'Min Validation Loss: {:f}'.format(min(val_loss))
+
+    f = open(os.path.join('./logs', logs, 'metrics.txt'), 'w')
+    f.write(metrics)
+    f.close()
+
+    print('Accuracy: %f' % accuracy)
+    print('Precision: %f' % precision)
+    print('Recall: %f' % recall)
+    print('F1 score: %f' % f1)
+    print('Cohens kappa: %f' % kappa)
+    print('ROC AUC: %f' % auc)
+    print(matrix)
+
+    draw_plots(hist, logs)
 
 def dataset_generator():
 
@@ -285,14 +352,14 @@ def draw_plots(hist, logs):
 
 def run_model(backbone, output, logs, loss='default'):
 
-    # base_model = backbone(include_top=False, input_shape = (HEIGHT, WIDTH, 3), weights='imagenet')
-    # model = create_fclayer(base_model)
+    base_model = backbone(include_top=False, input_shape = (HEIGHT, WIDTH, 3), weights='imagenet')
+    model = create_fclayer(base_model)
 
-    base_model = load_model(os.path.join(os.environ['HOME'], 'wrist/classification/models/d169_mura_class_224.h5'))
-    for i in range(6):
-        base_model._layers.pop()
-    base_model.summary()
-    model = create_fclayer(base_model, True)
+    # base_model = load_model(os.path.join(os.environ['HOME'], 'wrist/classification/models/d169_mura_class_224.h5'))
+    # for i in range(6):
+    #     base_model._layers.pop()
+    # base_model.summary()
+    # model = create_fclayer(base_model, True)
 
     train_datagen, validation_datagen = dataset_generator()
     train_generator, validation_generator = dir_generator(train_datagen, validation_datagen)
@@ -302,17 +369,17 @@ def run_model(backbone, output, logs, loss='default'):
     copyfile(os.path.realpath(__file__), './logs/train.py')
     hist, model = fit_model(model, train_generator, validation_generator, output, logs, 'init')
     # draw_plots(hist, logs)
-    model = fine_tuning(model, base_model, 224)
+    model = fine_tuning(model, base_model, 452)
     for layer in model.layers[0].layers:
         print(layer.name, layer.trainable)
     model = compile_model(model, loss=loss)
     hist, model = fit_model(model, train_generator, validation_generator, output, logs, 'fine')
-    draw_plots(hist, logs)
+    evaluate(model, validation_generator, NUM_VAL, logs, hist)
 
 if __name__ == '__main__':
 
     start_time = time.time()
     # run_model(DenseNet169, 'd169_mura_class_+143.h5', 'd169_mura_class_+143', 'default')
-    run_model(DenseNet169, 'd169_mura_wrist224_224.h5', 'd169_mura_wrist224_224', 'default')
+    run_model(DenseNet169, 'd169_mura_wrist452.h5', 'd169_mura_wrist452', 'default')
     end_time = time.time()
     print('Total time: {:.3f}'.format((end_time - start_time)/3600))
