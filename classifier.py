@@ -94,11 +94,11 @@ def evaluate(m, dir, nb_samples, logs, hist):
 
     metrics = ''
     # accuracy: (tp + tn) / (p + n)
-    val_acc = accuracy_score(classes, pred_classes)
+    accuracy = accuracy_score(classes, pred_classes)
     metrics = metrics + 'Accuracy: {:f}\n'.format(accuracy)
     # precision tp / (tp + fp)
     precision = precision_score(classes, pred_classes)
-    metrics = metrics + 'Precision: {:f}\n'.format(precision)
+    metrics = metrics + 'Precision: {:f}\n'.format(precision_so)
     # recall: tp / (tp + fn)
     recall = recall_score(classes, pred_classes)
     metrics = metrics + 'Recall: {:f}\n'.format(recall)
