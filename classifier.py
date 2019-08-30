@@ -38,7 +38,7 @@ from losses import binary_focal_loss, categorical_focal_loss
 
 # set dataset parameters
 WIDTH, HEIGHT = 224, 224
-BATCH_SIZE = 16
+BATCH_SIZE = 8
 # DATASET = 'AUB_WRIST'
 DATASET = 'MURA_ALL'
 # DATASET = 'MURA_WRIST'
