@@ -38,10 +38,11 @@ from losses import binary_focal_loss, categorical_focal_loss
 
 # set dataset parameters
 WIDTH, HEIGHT = 224, 224
-BATCH_SIZE = 8
+BATCH_SIZE = 16
 # DATASET = 'AUB_WRIST'
 # DATASET = 'MURA_ALL'
-DATASET = 'MURA_WRIST'
+# DATASET = 'MURA_WRIST'
+DATASET = 'MURA_HUMERUS'
 
 if DATASET == 'AUB_WRIST':
     TRAIN_DIR = '/home/ubuntu/wrist/datasets/split/train'
@@ -66,6 +67,12 @@ if DATASET == 'MURA_WRIST':
     NUM_VAL = 679
     CLASSES = 1
 
+if DATASET == 'MURA_HUMERUS':
+    TRAIN_DIR = '/home/ubuntu/wrist/datasets/MURA_humerus/train'
+    VAL_DIR = '/home/ubuntu/wrist/datasets/MURA_humerus/valid'
+    NUM_TRAIN = 1272
+    NUM_VAL = 288
+    CLASSES = 1
 
 # set training parameters
 EPOCHS = 200
@@ -361,15 +368,15 @@ def draw_plots(hist, logs):
 
 def run_model(backbone, output, logs, loss='default'):
 
-    # base_model = backbone(include_top=False, input_shape = (HEIGHT, WIDTH, 3), weights='imagenet')
-    # model = create_fclayer(base_model)
+    base_model = backbone(include_top=False, input_shape = (HEIGHT, WIDTH, 3), weights='imagenet')
+    model = create_fclayer(base_model)
 
     # base_model = load_model(os.path.join(os.environ['HOME'], 'wrist/classification/models/d169_mura_class_224.h5'))
-    base_model = load_model(os.path.join(os.environ['HOME'], 'wrist/classification/models/d169_mura_class_452.h5'))
-    for i in range(6):
-        base_model._layers.pop()
-    base_model.summary()
-    model = create_fclayer(base_model, True)
+    # base_model = load_model(os.path.join(os.environ['HOME'], 'wrist/classification/models/d169_mura_class_452.h5'))
+    # for i in range(6):
+    #     base_model._layers.pop()
+    # base_model.summary()
+    # model = create_fclayer(base_model, True)
 
     train_datagen, validation_datagen = dataset_generator()
     train_generator, validation_generator = dir_generator(train_datagen, validation_datagen)
@@ -379,7 +386,7 @@ def run_model(backbone, output, logs, loss='default'):
     copyfile(os.path.realpath(__file__), './logs/train.py')
     hist, model = fit_model(model, train_generator, validation_generator, output, logs, 'init')
     # draw_plots(hist, logs)
-    model = fine_tuning(model, base_model, 452)
+    model = fine_tuning(model, base_model, 224)
     for layer in model.layers[0].layers:
         print(layer.name, layer.trainable)
     model = compile_model(model, loss=loss)
@@ -392,6 +399,6 @@ if __name__ == '__main__':
 
     start_time = time.time()
     # run_model(DenseNet169, 'd169_mura_class_452.h5', 'd169_mura_class_452', 'default')
-    model, hist = run_model(DenseNet169, 'd169_mura_wrist452_452.h5', 'd169_mura_wrist452_452', 'default')
+    model, hist = run_model(DenseNet169, 'd169_mura_humerus_224.h5', 'd169_mura_humerus_224', 'default')
     end_time = time.time()
     print('Total time: {:.3f}'.format((end_time - start_time)/3600))
