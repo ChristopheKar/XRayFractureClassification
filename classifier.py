@@ -72,10 +72,19 @@ EPOCHS = 200
 STEPS_PER_EPOCH = NUM_TRAIN//BATCH_SIZE
 VALIDATION_STEPS = NUM_VAL//BATCH_SIZE
 
-def evaluate(m, img_generator, nb_samples, logs, hist):
+def evaluate(m, dir, nb_samples, logs, hist):
+
+    img_datagen = ImageDataGenerator(rescale=1./255)
+
+    img_generator = img_datagen.flow_from_directory(
+        dir,
+        target_size = (HEIGHT, WIDTH),
+        batch_size = 1,
+        shuffle = False,
+        class_mode = 'binary')
 
     img_generator.reset()
-    classes = img_generator.classes[img_generator.index_array]
+    classes = img_generator.classes[img_generator.index_array][0]
     nb_samples = len(classes)
 
     img_generator.reset()
@@ -352,14 +361,15 @@ def draw_plots(hist, logs):
 
 def run_model(backbone, output, logs, loss='default'):
 
-    base_model = backbone(include_top=False, input_shape = (HEIGHT, WIDTH, 3), weights='imagenet')
-    model = create_fclayer(base_model)
+    # base_model = backbone(include_top=False, input_shape = (HEIGHT, WIDTH, 3), weights='imagenet')
+    # model = create_fclayer(base_model)
 
     # base_model = load_model(os.path.join(os.environ['HOME'], 'wrist/classification/models/d169_mura_class_224.h5'))
-    # for i in range(6):
-    #     base_model._layers.pop()
-    # base_model.summary()
-    # model = create_fclayer(base_model, True)
+    base_model = load_model(os.path.join(os.environ['HOME'], 'wrist/classification/models/d169_mura_class_452.h5'))
+    for i in range(6):
+        base_model._layers.pop()
+    base_model.summary()
+    model = create_fclayer(base_model, True)
 
     train_datagen, validation_datagen = dataset_generator()
     train_generator, validation_generator = dir_generator(train_datagen, validation_datagen)
@@ -374,12 +384,14 @@ def run_model(backbone, output, logs, loss='default'):
         print(layer.name, layer.trainable)
     model = compile_model(model, loss=loss)
     hist, model = fit_model(model, train_generator, validation_generator, output, logs, 'fine')
-    evaluate(model, validation_generator, NUM_VAL, logs, hist)
+    evaluate(model, VAL_DIR, NUM_VAL, logs, hist)
+
+    return model, hist
 
 if __name__ == '__main__':
 
     start_time = time.time()
-    run_model(DenseNet169, 'd169_mura_class_452.h5', 'd169_mura_class_452', 'default')
-    # run_model(DenseNet169, 'd169_mura_wrist452.h5', 'd169_mura_wrist452', 'default')
+    # run_model(DenseNet169, 'd169_mura_class_452.h5', 'd169_mura_class_452', 'default')
+    model, hist = run_model(DenseNet169, 'd169_mura_wrist452_452.h5', 'd169_mura_wrist452_452', 'default')
     end_time = time.time()
     print('Total time: {:.3f}'.format((end_time - start_time)/3600))
