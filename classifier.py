@@ -38,7 +38,7 @@ from losses import binary_focal_loss, categorical_focal_loss
 
 # set dataset parameters
 WIDTH, HEIGHT = 224, 224
-BATCH_SIZE = 16
+BATCH_SIZE = 2
 # DATASET = 'AUB_WRIST'
 # DATASET = 'MURA_ALL'
 # DATASET = 'MURA_WRIST'
@@ -105,7 +105,7 @@ def evaluate(m, dir, nb_samples, logs, hist):
     metrics = metrics + 'Accuracy: {:f}\n'.format(accuracy)
     # precision tp / (tp + fp)
     precision = precision_score(classes, pred_classes)
-    metrics = metrics + 'Precision: {:f}\n'.format(precision_so)
+    metrics = metrics + 'Precision: {:f}\n'.format(precision)
     # recall: tp / (tp + fn)
     recall = recall_score(classes, pred_classes)
     metrics = metrics + 'Recall: {:f}\n'.format(recall)
@@ -368,15 +368,15 @@ def draw_plots(hist, logs):
 
 def run_model(backbone, output, logs, loss='default'):
 
-    base_model = backbone(include_top=False, input_shape = (HEIGHT, WIDTH, 3), weights='imagenet')
-    model = create_fclayer(base_model)
+    # base_model = backbone(include_top=False, input_shape = (HEIGHT, WIDTH, 3), weights='imagenet')
+    # model = create_fclayer(base_model)
 
-    # base_model = load_model(os.path.join(os.environ['HOME'], 'wrist/classification/models/d169_mura_class_224.h5'))
+    base_model = load_model(os.path.join(os.environ['HOME'], 'wrist/classification/models/d169_mura_class_224.h5'))
     # base_model = load_model(os.path.join(os.environ['HOME'], 'wrist/classification/models/d169_mura_class_452.h5'))
-    # for i in range(6):
-    #     base_model._layers.pop()
-    # base_model.summary()
-    # model = create_fclayer(base_model, True)
+    for i in range(6):
+        base_model._layers.pop()
+    base_model.summary()
+    model = create_fclayer(base_model, True)
 
     train_datagen, validation_datagen = dataset_generator()
     train_generator, validation_generator = dir_generator(train_datagen, validation_datagen)
@@ -399,6 +399,6 @@ if __name__ == '__main__':
 
     start_time = time.time()
     # run_model(DenseNet169, 'd169_mura_class_452.h5', 'd169_mura_class_452', 'default')
-    model, hist = run_model(DenseNet169, 'd169_mura_humerus_224.h5', 'd169_mura_humerus_224', 'default')
+    model, hist = run_model(DenseNet169, 'd169_mura_humerus224_224.h5', 'd169_mura_humerus224_224', 'default')
     end_time = time.time()
     print('Total time: {:.3f}'.format((end_time - start_time)/3600))
