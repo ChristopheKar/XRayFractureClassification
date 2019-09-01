@@ -386,7 +386,7 @@ def run_model(backbone, output, logs, loss='default'):
     copyfile(os.path.realpath(__file__), './logs/train.py')
     hist, model = fit_model(model, train_generator, validation_generator, output, logs, 'init')
     # draw_plots(hist, logs)
-    model = fine_tuning(model, base_model, 452)
+    model = fine_tuning(model, base_model, 19)
     for layer in model.layers[0].layers:
         print(layer.name, layer.trainable)
     model = compile_model(model, loss=loss)
@@ -399,6 +399,6 @@ if __name__ == '__main__':
 
     start_time = time.time()
     # run_model(DenseNet169, 'd169_mura_class_452.h5', 'd169_mura_class_452', 'default')
-    model, hist = run_model(DenseNet169, 'd169_mura_humerus452_452.h5', 'd169_mura_humerus452_452', 'default')
+    model, hist = run_model(DenseNet169, 'd169_mura_humerus452_19.h5', 'd169_mura_humerus452_19', 'default')
     end_time = time.time()
     print('Total time: {:.3f}'.format((end_time - start_time)/3600))
