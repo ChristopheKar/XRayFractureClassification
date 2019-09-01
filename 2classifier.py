@@ -29,10 +29,10 @@ from losses import binary_focal_loss, categorical_focal_loss
 
 # set dataset parameters
 WIDTH, HEIGHT = 224, 224
-BATCH_SIZE = 16
-DATASET = 'AUB_WRIST'
+BATCH_SIZE = 2
+# DATASET = 'AUB_WRIST'
 # DATASET = 'MURA_ALL'
-# DATASET = 'MURA_WRIST'
+DATASET = 'MURA_WRIST'
 
 if DATASET == 'AUB_WRIST':
     TRAIN_DIR = '/home/ubuntu/wrist/datasets/split/train'
@@ -127,6 +127,7 @@ def create_fclayer(conv_base, pre=False):
         layer.trainable = False
 
     x = conv_base.output
+    x = GlobalAveragePooling2D()(x)
     x = Flatten()(x)
     x = Dense(1024, activation='relu')(x)
     x = Dense(512, activation='relu')(x)
@@ -298,6 +299,6 @@ if __name__ == '__main__':
 
     start_time = time.time()
     # run_model(DenseNet169, 'd169_mura_class_224.h5', 'd169_mura_class_224', 'default')
-    run_model(DenseNet169, 'd169_finetune19_2.h5', 'd169_finetune19_2', 'default')
+    run_model(DenseNet169, 'test.h5', 'test', 'default')
     end_time = time.time()
     print('Total time: {:.3f}'.format((end_time - start_time)/3600))
