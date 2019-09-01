@@ -366,7 +366,7 @@ def draw_plots(hist, logs):
 
     plt.savefig(os.path.join('./logs', logs, 'loss.png'))
 
-def run_model2(backbone, output, logs, loss='default'):
+def run_model(backbone, output, logs, loss='default'):
 
     # base_model = backbone(include_top=False, input_shape = (HEIGHT, WIDTH, 3), weights='imagenet')
     # model = create_fclayer(base_model)
@@ -377,35 +377,6 @@ def run_model2(backbone, output, logs, loss='default'):
         base_model._layers.pop()
     base_model.summary()
     model = create_fclayer(base_model, True)
-
-    train_datagen, validation_datagen = dataset_generator()
-    train_generator, validation_generator = dir_generator(train_datagen, validation_datagen)
-    model = compile_model(model, loss=loss)
-    model.summary()
-    from shutil import copyfile
-    copyfile(os.path.realpath(__file__), './logs/train.py')
-    hist, model = fit_model(model, train_generator, validation_generator, output, logs, 'init')
-    # draw_plots(hist, logs)
-    model = fine_tuning(model, base_model, 19)
-    for layer in model.layers[0].layers:
-        print(layer.name, layer.trainable)
-    model = compile_model(model, loss=loss)
-    hist, model = fit_model(model, train_generator, validation_generator, output, logs, 'fine')
-    evaluate(model, VAL_DIR, NUM_VAL, logs, hist)
-
-    return model, hist
-
-def run_model(backbone, output, logs, loss='default'):
-
-    base_model = backbone(include_top=False, input_shape = (HEIGHT, WIDTH, 3), weights='imagenet')
-    model = create_fclayer(base_model)
-
-    # base_model = load_model(os.path.join(os.environ['HOME'], 'wrist/classification/models/d169_mura_class_224.h5'))
-    # base_model = load_model(os.path.join(os.environ['HOME'], 'wrist/classification/models/d169_mura_class_452.h5'))
-    # for i in range(6):
-    #     base_model._layers.pop()
-    # base_model.summary()
-    # model = create_fclayer(base_model, True)
 
     train_datagen, validation_datagen = dataset_generator()
     train_generator, validation_generator = dir_generator(train_datagen, validation_datagen)
@@ -428,11 +399,6 @@ if __name__ == '__main__':
 
     start_time = time.time()
     # run_model(DenseNet169, 'd169_mura_class_452.h5', 'd169_mura_class_452', 'default')
-    model, hist = run_model(DenseNet169, 'd169_mura_humerus452.h5', 'd169_mura_humerus452', 'default')
-    end_time = time.time()
-    print('Total time: {:.3f}'.format((end_time - start_time)/3600))
-
-    start_time = time.time()
-    model, hist = run_model2(DenseNet169, 'd169_mura_humerus452_19.h5', 'd169_mura_humerus452_19', 'default')
+    model, hist = run_model(DenseNet169, 'd169_mura_humerus452_452.h5', 'd169_mura_humerus452_452', 'default')
     end_time = time.time()
     print('Total time: {:.3f}'.format((end_time - start_time)/3600))
