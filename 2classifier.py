@@ -127,8 +127,7 @@ def create_fclayer(conv_base, pre=False):
         layer.trainable = False
 
     x = conv_base.output
-    x = GlobalAveragePooling2D()(x)
-    # x = Flatten()(x)
+    x = Flatten()(x)
     x = Dense(1024, activation='relu')(x)
     x = Dense(512, activation='relu')(x)
     x = Dense(256, activation='relu')(x)
