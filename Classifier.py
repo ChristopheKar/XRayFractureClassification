@@ -70,6 +70,7 @@ class ClassifierCNN:
         self.batch_size = 2
         self.loss = 'default'
         self.lrate=0.0001
+        self.layers = 19
 
     def draw_plots(self):
 
@@ -249,11 +250,11 @@ class ClassifierCNN:
         self.model.add(Dense(128, activation='relu'))
         self.model.add(Dense(self.classes, activation=self.activation))
 
-    def fine_tune(self, conv_base, layers):
+    def fine_tune(self, conv_base):
 
         conv_base.trainable = True
 
-        for layer in conv_base.layers[:-layers]:
+        for layer in conv_base.layers[:-self.layers]:
             layer.trainable = False
 
     def step_decay(self, epoch):
@@ -327,8 +328,7 @@ class ClassifierCNN:
             self.history = self.model.fit_generator(
                                 self.train_generator,
                                 steps_per_epoch=100,
-                                # epochs=25,
-                                epochs=2,
+                                epochs=25,
                                 validation_data=self.validation_generator,
                                 validation_steps=50,
                                 callbacks=[checkpoint, reduce_lr])
@@ -338,8 +338,7 @@ class ClassifierCNN:
             self.history = self.model.fit_generator(
                                 self.train_generator,
                                 steps_per_epoch=150,
-                                # epochs=125,
-                                epochs = 1,
+                                epochs=125,
                                 validation_data=self.validation_generator,
                                 validation_steps=50,
                                 callbacks=[checkpoint, tensorboard, reduce_lr])
@@ -365,7 +364,7 @@ class ClassifierCNN:
         start_time = time.time()
         self.fit_model('init')
         checkpoint_1 = time.time()
-        self.fine_tune(base_model, 19)
+        self.fine_tune(base_model)
         self.compile_model()
         checkpoint_2 = time.time()
         self.fit_model('fine')
