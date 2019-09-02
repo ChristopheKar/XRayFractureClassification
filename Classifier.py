@@ -147,7 +147,7 @@ class ClassifierCNN:
         metrics = metrics + 'Max Validation Accuracy: {:f}\n'.format(max(val_acc))
         metrics = metrics + 'Min Training Loss: {:f}\n'.format(max(loss))
         metrics = metrics + 'Min Validation Loss: {:f}\n'.format(min(val_loss))
-        metrics = metrics + 'Training Time: {:f} hours\n'.format(total_time)
+        metrics = metrics + 'Training Time: {:f} hours\n'.format(self.total_time)
 
         self.metrics_path = os.path.join(self.logs_path, 'metrics')
         os.makedirs(self.metrics_path)
@@ -338,7 +338,7 @@ class ClassifierCNN:
                                 self.train_generator,
                                 steps_per_epoch=150,
                                 # epochs=125,
-                                epochs = 5,
+                                epochs = 1,
                                 validation_data=self.validation_generator,
                                 validation_steps=50,
                                 callbacks=[checkpoint, tensorboard, reduce_lr])
