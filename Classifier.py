@@ -205,7 +205,7 @@ class ClassifierCNN:
             self.num_val = 288
             self.classes = 1
 
-    def load_dataset_generator(self):
+    def load_dataset_generators(self):
 
         train_datagen = ImageDataGenerator(
             rescale=1./255,
