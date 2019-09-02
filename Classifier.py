@@ -248,7 +248,7 @@ class ClassifierCNN:
         self.model.add(Dense(128, activation='relu'))
         self.model.add(Dense(self.classes, activation=self.activation))
 
-    def fine_tuning(self, conv_base, training_layers):
+    def fine_tune(self, conv_base, training_layers):
 
         conv_base.trainable = True
 
