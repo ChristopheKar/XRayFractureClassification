@@ -71,7 +71,7 @@ class ClassifierCNN:
         self.loss = 'default'
         self.lrate=0.0001
 
-    def draw_plots():
+    def draw_plots(self):
 
         acc = self.history.history['acc']
         val_acc = self.history.history['val_acc']
@@ -268,7 +268,7 @@ class ClassifierCNN:
             lrate = min_lrate
         return lrate
 
-    def compile_model():
+    def compile_model(self):
 
         adam = Adam(lr=self.lrate,
                     beta_1=0.9,
