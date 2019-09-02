@@ -236,26 +236,24 @@ class ClassifierCNN:
 
         conv_base.trainable = False
 
-        model = Sequential()
+        self.model = Sequential()
         if pre is False:
-            model.add(conv_base)
+            self.model.add(conv_base)
         else:
-            model.add(conv_base.layers[0])
-        model.add(Flatten())
-        model.add(Dense(1024, activation='relu'))
-        model.add(Dense(512, activation='relu'))
-        model.add(Dense(256, activation='relu'))
-        model.add(Dense(128, activation='relu'))
-        model.add(Dense(self.classes, activation=self.activation))
+            self.model.add(conv_base.layers[0])
+        self.model.add(Flatten())
+        self.model.add(Dense(1024, activation='relu'))
+        self.model.add(Dense(512, activation='relu'))
+        self.model.add(Dense(256, activation='relu'))
+        self.model.add(Dense(128, activation='relu'))
+        self.model.add(Dense(self.classes, activation=self.activation))
 
-    def fine_tuning(self, model, conv_base, training_layers):
+    def fine_tuning(self, conv_base, training_layers):
 
         conv_base.trainable = True
 
         for layer in conv_base.layers[:-training_layers]:
             layer.trainable = False
-
-        return model
 
     def step_decay(self, epoch):
 
