@@ -4,7 +4,6 @@ import os
 import time
 import math
 import numpy as np
-import pandas as pd
 from shutil import copyfile
 import matplotlib.pyplot as plt
 
@@ -46,8 +45,8 @@ class ClassifierCNN:
         self.home = os.environ['HOME']
 
         self.global_root = os.path.join(self.home, 'wrist/classification')
-        self.models_root = os.path.join(self.global_root, models)
-        self.logs_root = os.path.join(self.global_root, logs)
+        self.models_root = os.path.join(self.global_root, 'models')
+        self.logs_root = os.path.join(self.global_root, 'logs')
         self.datasets_root = os.path.join(self.home, 'wrist/datasets')
 
         self.model_name = model_name + '.h5'
