@@ -32,7 +32,7 @@ from losses import binary_focal_loss, categorical_focal_loss
 # import keras models
 from keras.applications.inception_v3 import InceptionV3
 from keras.applications.inception_resnet_v2 import InceptionResNetV2
-from keras.applications.resnet50 import ResNet50, ResNet101
+from keras.applications.resnet50 import ResNet50
 from keras.applications.nasnet import NASNetLarge, NASNetMobile
 from keras.applications.vgg16 import VGG16
 from keras.applications.densenet import DenseNet121, DenseNet169, DenseNet201
