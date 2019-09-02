@@ -248,11 +248,11 @@ class ClassifierCNN:
         self.model.add(Dense(128, activation='relu'))
         self.model.add(Dense(self.classes, activation=self.activation))
 
-    def fine_tune(self, conv_base, training_layers):
+    def fine_tune(self, conv_base, layers):
 
         conv_base.trainable = True
 
-        for layer in conv_base.layers[:-training_layers]:
+        for layer in conv_base.layers[:-layers]:
             layer.trainable = False
 
     def step_decay(self, epoch):
@@ -364,7 +364,7 @@ class ClassifierCNN:
         start_time = time.time()
         self.fit_model('init')
         checkpoint_1 = time.time()
-        self.fine_tune(base_model, layers=19)
+        self.fine_tune(base_model, 19)
         self.compile_model()
         checkpoint_2 = time.time()
         self.fit_model('fine')
