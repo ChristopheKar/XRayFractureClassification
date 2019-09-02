@@ -352,12 +352,12 @@ class ClassifierCNN:
             for i in range(6):
                 base_model._layers.pop()
             base_model.summary()
-            self.model = create_fclayer(base_model, True)
+            self.create_fclayer(base_model, True)
         else:
             base_model = self.backbone(include_top=False,
                                        input_shape = (self.height,self.width,3),
                                        weights='imagenet')
-            self.model = self.create_fclayer(base_model)
+            self.create_fclayer(base_model)
 
         self.load_dataset_generators()
         self.compile_model()
