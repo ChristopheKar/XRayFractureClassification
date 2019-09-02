@@ -150,7 +150,8 @@ class ClassifierCNN:
         metrics = metrics + 'Training Time: {:f} hours\n'.format(self.total_time)
 
         self.metrics_path = os.path.join(self.logs_path, 'metrics')
-        os.makedirs(self.metrics_path)
+        if not os.path.exists(self.metrics_path):
+            os.makedirs(self.metrics_path)
 
         f = open(os.path.join(self.metrics_path, 'metrics.txt'), 'w')
         f.write(metrics)
