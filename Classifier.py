@@ -71,6 +71,104 @@ class ClassifierCNN:
         self.loss = 'default'
         self.lrate=0.0001
 
+    def draw_plots():
+
+        acc = self.history.history['acc']
+        val_acc = self.history.history['val_acc']
+        loss = self.history.history['loss']
+        val_loss = self.history.history['val_loss']
+
+        epochs = range(len(acc))
+
+        plt.plot(epochs, acc, 'b', label='Training acc')
+        plt.plot(epochs, val_acc, 'r', label='Validation acc')
+        plt.title('Training and validation accuracy')
+        plt.legend()
+
+        plt.savefig(os.path.join(self.metrics_path, 'acc.png'))
+        plt.figure()
+
+        plt.plot(epochs, loss, 'b', label='Training loss')
+        plt.plot(epochs, val_loss, 'r', label='Validation loss')
+        plt.title('Training and validation loss')
+        plt.legend()
+
+        plt.savefig(os.path.join(self.metrics_path, 'loss.png'))
+
+    def evaluate(self):
+
+        img_datagen = ImageDataGenerator(rescale=1./255)
+
+        img_generator = img_datagen.flow_from_directory(
+            self.val_dir,
+            target_size = (self.height, self.width),
+            batch_size = 1,
+            shuffle = False,
+            class_mode = self.class_mode)
+
+        img_generator.reset()
+        classes = img_generator.classes[img_generator.index_array][0]
+        nb_samples = len(classes)
+
+        img_generator.reset()
+        Y_pred = self.model.predict_generator(img_generator, steps=nb_samples)
+        pred_prob = np.array([a[0] for a in Y_pred])
+        pred_classes = pred_prob.round().astype('int32')
+
+        metrics = ''
+        # accuracy: (tp + tn) / (p + n)
+        accuracy = accuracy_score(classes, pred_classes)
+        metrics = metrics + 'Accuracy: {:f}\n'.format(accuracy)
+        # precision tp / (tp + fp)
+        precision = precision_score(classes, pred_classes)
+        metrics = metrics + 'Precision: {:f}\n'.format(precision)
+        # recall: tp / (tp + fn)
+        recall = recall_score(classes, pred_classes)
+        metrics = metrics + 'Recall: {:f}\n'.format(recall)
+        # f1: 2 tp / (2 tp + fp + fn)
+        f1 = f1_score(classes, pred_classes)
+        metrics = metrics + 'F1 score: {:f}\n'.format(f1)
+        # kappa
+        kappa = cohen_kappa_score(classes, pred_classes)
+        metrics = metrics + 'Cohens Kappa: {:f}\n'.format(kappa)
+        # ROC AUC
+        auc = roc_auc_score(classes, pred_prob)
+        metrics = metrics + 'ROC AUC: {:f}\n'.format(auc)
+        # confusion matrix
+        matrix = confusion_matrix(classes, pred_classes)
+        metrics = metrics + 'Confusion Matrix:\n' + str(matrix) + '\n'
+
+        acc = self.history.history['acc']
+        val_acc = self.history.history['val_acc']
+        loss = self.history.history['loss']
+        val_loss = self.history.history['val_loss']
+
+        metrics = metrics + 'Max Training Accuracy: {:f}\n'.format(max(acc))
+        metrics = metrics + 'Max Validation Accuracy: {:f}\n'.format(max(val_acc))
+        metrics = metrics + 'Min Training Loss: {:f}\n'.format(max(loss))
+        metrics = metrics + 'Min Validation Loss: {:f}\n'.format(min(val_loss))
+        metrics = metrics + 'Training Time: {:f} hours\n'.format(total_time)
+
+        self.metrics_path = os.path.join(self.logs_path, 'metrics')
+        os.makedirs(self.metrics_path)
+
+        f = open(os.path.join(self.metrics_path, 'metrics.txt'), 'w')
+        f.write(metrics)
+        f.close()
+
+        copyfile(os.path.realpath(__file__),
+                 os.path.join(self.metrics_path, 'train.py'))
+
+        print('Accuracy: %f' % accuracy)
+        print('Precision: %f' % precision)
+        print('Recall: %f' % recall)
+        print('F1 score: %f' % f1)
+        print('Cohens kappa: %f' % kappa)
+        print('ROC AUC: %f' % auc)
+        print(matrix)
+
+        self.draw_plots()
+
     def define_dataset(self, dataset):
 
         if dataset == 'AUB_WRIST':
@@ -148,9 +246,7 @@ class ClassifierCNN:
         model.add(Dense(512, activation='relu'))
         model.add(Dense(256, activation='relu'))
         model.add(Dense(128, activation='relu'))
-        model.add(Dense(CLASSES, activation=self.activation))
-
-        return model
+        model.add(Dense(self.classes, activation=self.activation))
 
     def fine_tuning(self, model, conv_base, training_layers):
 
@@ -194,8 +290,6 @@ class ClassifierCNN:
                            optimizer=adam,
                            metrics=['accuracy'])
 
-        return model
-
     def fit_model(self, steps='init'):
 
         # reduce learning rate on plateau
@@ -234,7 +328,8 @@ class ClassifierCNN:
             self.history = self.model.fit_generator(
                                 self.train_generator,
                                 steps_per_epoch=100,
-                                epochs=25,
+                                # epochs=25,
+                                epochs=2,
                                 validation_data=self.validation_generator,
                                 validation_steps=50,
                                 callbacks=[checkpoint, reduce_lr])
@@ -244,7 +339,8 @@ class ClassifierCNN:
             self.history = self.model.fit_generator(
                                 self.train_generator,
                                 steps_per_epoch=150,
-                                epochs=125,
+                                # epochs=125,
+                                epochs = 5,
                                 validation_data=self.validation_generator,
                                 validation_steps=50,
                                 callbacks=[checkpoint, tensorboard, reduce_lr])
@@ -276,5 +372,5 @@ class ClassifierCNN:
         self.fit_model('fine')
         end_time = time.time()
         total_time = (checkpoint_1 - start_time) + (end_time - checkpoint_2)
-        total_time = total_time / 3600
-        # evaluate(model, VAL_DIR, NUM_VAL, logs, hist, total_time)
+        self.total_time = total_time / 3600
+        self.evaluate()
