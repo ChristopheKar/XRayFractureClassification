@@ -185,7 +185,7 @@ class ClassifierCNN:
         if dataset == 'MURA_ALL':
             mura_all = os.path.join(self.datasets_root, 'MURA_classification')
             self.train_dir = os.path.join(mura_all, 'train')
-            self.val_dir = os.path.join(mura_all, 'val')
+            self.val_dir = os.path.join(mura_all, 'valid')
             self.num_train = 36804
             self.num_val = 3197
             self.classes = 7
