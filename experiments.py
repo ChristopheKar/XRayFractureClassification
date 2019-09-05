@@ -70,57 +70,64 @@ if __name__ == '__main__':
     # cls.layers = 224
     # cls.train()
 
-    cls = ClassifierCNN('d169_mura_class_224.h5', 'MURA_HUMERUS', 'd169_mura_humerus_224_19_v1')
-    cls.layers = 19
-    cls.train()
-    cls = ClassifierCNN('d169_mura_class_224.h5', 'MURA_WRIST', 'd169_mura_wrist_224_19_v1')
-    cls.layers = 19
-    cls.train()
-    cls = ClassifierCNN('d169_mura_class_224.h5', 'AUB_WRIST', 'd169_aub_wrist_224_19_v1')
-    cls.layers = 19
-    cls.train()
-    cls = ClassifierCNN('d169_mura_class_224.h5', 'MURA_HUMERUS', 'd169_mura_humerus_224_224_v1')
+    # cls = ClassifierCNN('d169_mura_class_224.h5', 'MURA_HUMERUS', 'd169_mura_humerus_224_19_v1')
+    # cls.layers = 19
+    # cls.train()
+    # cls = ClassifierCNN('d169_mura_class_224.h5', 'MURA_WRIST', 'd169_mura_wrist_224_19_v1')
+    # cls.layers = 19
+    # cls.train()
+    # cls = ClassifierCNN('d169_mura_class_224.h5', 'AUB_WRIST', 'd169_aub_wrist_224_19_v1')
+    # cls.layers = 19
+    # cls.train()
+    # cls = ClassifierCNN('d169_mura_class_224.h5', 'MURA_HUMERUS', 'd169_mura_humerus_224_224_v1')
+    # cls.layers = 224
+    # cls.train()
+    # cls = ClassifierCNN('d169_mura_class_224.h5', 'MURA_WRIST', 'd169_mura_wrist_224_224_v1')
+    # cls.layers = 224
+    # cls.train()
+    # cls = ClassifierCNN('d169_mura_class_224.h5', 'AUB_WRIST', 'd169_aub_wrist_224_224_v1')
+    # cls.layers = 224
+    # cls.train()
+    # cls = ClassifierCNN('d169_mura_class_224.h5', 'MURA_HUMERUS', 'd169_mura_humerus_224_19_v2')
+    # cls.layers = 19
+    # cls.train()
+    # cls = ClassifierCNN('d169_mura_class_224.h5', 'MURA_WRIST', 'd169_mura_wrist_224_19_v2')
+    # cls.layers = 19
+    # cls.train()
+    # cls = ClassifierCNN('d169_mura_class_224.h5', 'AUB_WRIST', 'd169_aub_wrist_224_19_v2')
+    # cls.layers = 19
+    # cls.train()
+    # cls = ClassifierCNN('d169_mura_class_224.h5', 'MURA_HUMERUS', 'd169_mura_humerus_224_224_v2')
+    # cls.layers = 224
+    # cls.train()
+    # cls = ClassifierCNN('d169_mura_class_224.h5', 'MURA_WRIST', 'd169_mura_wrist_224_224_v2')
+    # cls.layers = 224
+    # cls.train()
+    # cls = ClassifierCNN('d169_mura_class_224.h5', 'AUB_WRIST', 'd169_aub_wrist_224_224_v2')
+    # cls.layers = 224
+    # cls.train()
+    # cls = ClassifierCNN('d169_mura_class_224.h5', 'MURA_HUMERUS', 'd169_mura_humerus_224_19_v3')
+    # cls.layers = 19
+    # cls.train()
+    # cls = ClassifierCNN('d169_mura_class_224.h5', 'MURA_WRIST', 'd169_mura_wrist_224_19_v3')
+    # cls.layers = 19
+    # cls.train()
+    # cls = ClassifierCNN('d169_mura_class_224.h5', 'AUB_WRIST', 'd169_aub_wrist_224_19_v3')
+    # cls.layers = 19
+    # cls.train()
+    # cls = ClassifierCNN('d169_mura_class_224.h5', 'MURA_HUMERUS', 'd169_mura_humerus_224_224_v3')
+    # cls.layers = 224
+    # cls.train()
+    # cls = ClassifierCNN('d169_mura_class_224.h5', 'MURA_WRIST', 'd169_mura_wrist_224_224_v3')
+    # cls.layers = 224
+    # cls.train()
+    # cls = ClassifierCNN('d169_mura_class_224.h5', 'AUB_WRIST', 'd169_aub_wrist_224_224_v3')
+    # cls.layers = 224
+    # cls.train()
+
+    cls = ClassifierCNN(DenseNet169, 'MURA_WRIST', 'd169_mura_wrist_224_v4')
     cls.layers = 224
     cls.train()
-    cls = ClassifierCNN('d169_mura_class_224.h5', 'MURA_WRIST', 'd169_mura_wrist_224_224_v1')
-    cls.layers = 224
-    cls.train()
-    cls = ClassifierCNN('d169_mura_class_224.h5', 'AUB_WRIST', 'd169_aub_wrist_224_224_v1')
-    cls.layers = 224
-    cls.train()
-    cls = ClassifierCNN('d169_mura_class_224.h5', 'MURA_HUMERUS', 'd169_mura_humerus_224_19_v2')
+    cls = ClassifierCNN('d169_mura_class_224.h5', 'MURA_WRIST', 'd169_mura_wrist_224_19_v4')
     cls.layers = 19
-    cls.train()
-    cls = ClassifierCNN('d169_mura_class_224.h5', 'MURA_WRIST', 'd169_mura_wrist_224_19_v2')
-    cls.layers = 19
-    cls.train()
-    cls = ClassifierCNN('d169_mura_class_224.h5', 'AUB_WRIST', 'd169_aub_wrist_224_19_v2')
-    cls.layers = 19
-    cls.train()
-    cls = ClassifierCNN('d169_mura_class_224.h5', 'MURA_HUMERUS', 'd169_mura_humerus_224_224_v2')
-    cls.layers = 224
-    cls.train()
-    cls = ClassifierCNN('d169_mura_class_224.h5', 'MURA_WRIST', 'd169_mura_wrist_224_224_v2')
-    cls.layers = 224
-    cls.train()
-    cls = ClassifierCNN('d169_mura_class_224.h5', 'AUB_WRIST', 'd169_aub_wrist_224_224_v2')
-    cls.layers = 224
-    cls.train()
-    cls = ClassifierCNN('d169_mura_class_224.h5', 'MURA_HUMERUS', 'd169_mura_humerus_224_19_v3')
-    cls.layers = 19
-    cls.train()
-    cls = ClassifierCNN('d169_mura_class_224.h5', 'MURA_WRIST', 'd169_mura_wrist_224_19_v3')
-    cls.layers = 19
-    cls.train()
-    cls = ClassifierCNN('d169_mura_class_224.h5', 'AUB_WRIST', 'd169_aub_wrist_224_19_v3')
-    cls.layers = 19
-    cls.train()
-    cls = ClassifierCNN('d169_mura_class_224.h5', 'MURA_HUMERUS', 'd169_mura_humerus_224_224_v3')
-    cls.layers = 224
-    cls.train()
-    cls = ClassifierCNN('d169_mura_class_224.h5', 'MURA_WRIST', 'd169_mura_wrist_224_224_v3')
-    cls.layers = 224
-    cls.train()
-    cls = ClassifierCNN('d169_mura_class_224.h5', 'AUB_WRIST', 'd169_aub_wrist_224_224_v3')
-    cls.layers = 224
     cls.train()
