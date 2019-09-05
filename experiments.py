@@ -133,26 +133,26 @@ if __name__ == '__main__':
     # cls.layers = 224
     # cls.train()
 
-    cls = ClassifierCNN('d169_mura_class_224.h5', 'AUB_WRIST', 'd169_aub_wrist_224_19_v4')
+    cls = ClassifierCNN('d169_mura_class_aug_224.h5', 'AUB_WRIST', 'd169_aub_wrist_224_19_v4')
     cls.layers = 19
     cls.train()
 
-    cls = ClassifierCNN('d169_mura_class_224.h5', 'AUB_WRIST', 'd169_aub_wrist_224_224_v4')
+    cls = ClassifierCNN('d169_mura_class_aug_224.h5', 'AUB_WRIST', 'd169_aub_wrist_224_224_v4')
     cls.layers = 224
     cls.train()
 
-    cls = ClassifierCNN('d169_mura_class_224.h5', 'AUB_WRIST', 'd169_aub_wrist_224_19_v5')
+    cls = ClassifierCNN('d169_mura_class_aug_224.h5', 'AUB_WRIST', 'd169_aub_wrist_224_19_v5')
     cls.layers = 19
     cls.train()
 
-    cls = ClassifierCNN('d169_mura_class_224.h5', 'AUB_WRIST', 'd169_aub_wrist_224_224_v5')
+    cls = ClassifierCNN('d169_mura_class_aug_224.h5', 'AUB_WRIST', 'd169_aub_wrist_224_224_v5')
     cls.layers = 224
     cls.train()
 
-    cls = ClassifierCNN('d169_mura_class_224.h5', 'AUB_WRIST', 'd169_aub_wrist_224_19_v6')
+    cls = ClassifierCNN('d169_mura_class_aug_224.h5', 'AUB_WRIST', 'd169_aub_wrist_224_19_v6')
     cls.layers = 19
     cls.train()
 
-    cls = ClassifierCNN('d169_mura_class_224.h5', 'AUB_WRIST', 'd169_aub_wrist_224_224_v6')
+    cls = ClassifierCNN('d169_mura_class_aug_224.h5', 'AUB_WRIST', 'd169_aub_wrist_224_224_v6')
     cls.layers = 224
     cls.train()
