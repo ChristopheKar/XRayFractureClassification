@@ -174,38 +174,63 @@ class ClassifierCNN:
     def define_dataset(self, dataset):
 
         if dataset == 'AUB_WRIST':
-            aub_wrist = os.path.join(self.datasets_root, 'split')
-            self.train_dir = os.path.join(aub_wrist, 'train')
-            self.val_dir = os.path.join(aub_wrist, 'val')
+            dataset_base = os.path.join(self.datasets_root, 'split')
             self.num_train = 15220
             self.num_val = 1904
             self.classes = 1
 
 
         if dataset == 'MURA_ALL':
-            mura_all = os.path.join(self.datasets_root, 'MURA_classification')
-            self.train_dir = os.path.join(mura_all, 'train')
-            self.val_dir = os.path.join(mura_all, 'valid')
+            dataset_base = os.path.join(self.datasets_root, 'MURA_classification')
             self.num_train = 36804
             self.num_val = 3197
             self.classes = 7
 
 
         if dataset == 'MURA_WRIST':
-            mura_wrist = os.path.join(self.datasets_root, 'MURA_wrist')
-            self.train_dir = os.path.join(mura_wrist, 'train')
-            self.val_dir = os.path.join(mura_wrist, 'valid')
+            dataset_base = os.path.join(self.datasets_root, 'MURA_wrist')
             self.num_train = 9748
             self.num_val = 679
             self.classes = 1
 
         if dataset == 'MURA_HUMERUS':
-            mura_humerus = os.path.join(self.datasets_root, 'MURA_humerus')
-            self.train_dir = os.path.join(mura_humerus, 'train')
-            self.val_dir = os.path.join(mura_humerus, 'valid')
+            dataset_base = os.path.join(self.datasets_root, 'MURA_humerus')
             self.num_train = 1272
             self.num_val = 288
             self.classes = 1
+
+        if dataset == 'MURA_HAND':
+            dataset_base = os.path.join(self.dataets_root, 'MURA_hand')
+            self.num_train = 5543
+            self.num_val = 460
+            self.classes = 1
+
+        if dataset == 'MURA_SHOULDER':
+            dataset_base = os.path.join(self.dataets_root, 'MURA_shoulder')
+            self.num_train = 8379
+            self.num_val = 563
+            self.classes = 1
+
+        if dataset == 'MURA_FINGER':
+            dataset_base = os.path.join(self.dataets_root, 'MURA_finger')
+            self.num_train = 5106
+            self.num_val = 461
+            self.classes = 1
+
+        if dataset == 'MURA_FOREARM':
+            dataset_base = os.path.join(self.dataets_root, 'MURA_forearm')
+            self.num_train = 1825
+            self.num_val = 301
+            self.classes = 1
+
+        if dataset == 'MURA_ELBOW':
+            dataset_base = os.path.join(self.dataets_root, 'MURA_elbow')
+            self.num_train = 4931
+            self.num_val = 465
+            self.classes = 1
+
+        self.train_dir = os.path.join(dataset_base, 'train')
+        self.val_dir = os.path.join(dataset_base, 'valid')
 
     def load_dataset_generators(self):
 
