@@ -200,31 +200,31 @@ class ClassifierCNN:
             self.classes = 1
 
         if dataset == 'MURA_HAND':
-            dataset_base = os.path.join(self.dataets_root, 'MURA_hand')
+            dataset_base = os.path.join(self.datasets_root, 'MURA_hand')
             self.num_train = 5543
             self.num_val = 460
             self.classes = 1
 
         if dataset == 'MURA_SHOULDER':
-            dataset_base = os.path.join(self.dataets_root, 'MURA_shoulder')
+            dataset_base = os.path.join(self.datasets_root, 'MURA_shoulder')
             self.num_train = 8379
             self.num_val = 563
             self.classes = 1
 
         if dataset == 'MURA_FINGER':
-            dataset_base = os.path.join(self.dataets_root, 'MURA_finger')
+            dataset_base = os.path.join(self.datasets_root, 'MURA_finger')
             self.num_train = 5106
             self.num_val = 461
             self.classes = 1
 
         if dataset == 'MURA_FOREARM':
-            dataset_base = os.path.join(self.dataets_root, 'MURA_forearm')
+            dataset_base = os.path.join(self.datasets_root, 'MURA_forearm')
             self.num_train = 1825
             self.num_val = 301
             self.classes = 1
 
         if dataset == 'MURA_ELBOW':
-            dataset_base = os.path.join(self.dataets_root, 'MURA_elbow')
+            dataset_base = os.path.join(self.datasets_root, 'MURA_elbow')
             self.num_train = 4931
             self.num_val = 465
             self.classes = 1
