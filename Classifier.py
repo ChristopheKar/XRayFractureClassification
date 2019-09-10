@@ -375,7 +375,7 @@ class ClassifierCNN:
                                 steps_per_epoch=self.num_train//self.batch_size,
                                 epochs=25,
                                 validation_data=self.validation_generator,
-                                validation_steps=self.val_trian//self.batch_size,
+                                validation_steps=self.num_val//self.batch_size,
                                 callbacks=[checkpoint, reduce_lr])
 
         elif steps == 'fine':
