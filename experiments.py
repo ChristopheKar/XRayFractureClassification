@@ -157,12 +157,15 @@ if __name__ == '__main__':
     # cls.layers = 224
     # cls.train()
 
-    cls = ClassifierCNN(DenseNet169, 'MURA_HAND', 'd169_mura_hand_224_v4')
+    cls = ClassifierCNN(DenseNet169, 'MURA_WRIST', 'd169_mura_hand_test')
     cls.layers = 224
     cls.train()
-    cls = ClassifierCNN('d169_mura_class_224.h5', 'MURA_HAND', 'd169_mura_hand_224_19_v4')
-    cls.layers = 19
-    cls.train()
+    # cls = ClassifierCNN(DenseNet169, 'MURA_HAND', 'd169_mura_hand_224_v4')
+    # cls.layers = 224
+    # cls.train()
+    # cls = ClassifierCNN('d169_mura_class_224.h5', 'MURA_HAND', 'd169_mura_hand_224_19_v4')
+    # cls.layers = 19
+    # cls.train()
     #
     # cls = ClassifierCNN(DenseNet169, 'MURA_FOREARM', 'd169_mura_forearm_224_v1')
     # cls.layers = 224
