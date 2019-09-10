@@ -348,24 +348,44 @@ class ClassifierCNN:
                            verbose=1,
                            patience=20)
 
+        # # fit model
+        # if steps == 'init':
+        #     self.history = self.model.fit_generator(
+        #                         self.train_generator,
+        #                         steps_per_epoch=100,
+        #                         epochs=25,
+        #                         validation_data=self.validation_generator,
+        #                         validation_steps=50,
+        #                         callbacks=[checkpoint, reduce_lr])
+        #
+        # elif steps == 'fine':
+        #
+        #     self.history = self.model.fit_generator(
+        #                         self.train_generator,
+        #                         steps_per_epoch=150,
+        #                         epochs=125,
+        #                         validation_data=self.validation_generator,
+        #                         validation_steps=50,
+        #                         callbacks=[checkpoint, tensorboard, reduce_lr])
+
         # fit model
         if steps == 'init':
             self.history = self.model.fit_generator(
                                 self.train_generator,
-                                steps_per_epoch=100,
+                                steps_per_epoch=self.num_train//self.batch_size,
                                 epochs=25,
                                 validation_data=self.validation_generator,
-                                validation_steps=50,
+                                validation_steps=self.val_trian//self.batch_size,
                                 callbacks=[checkpoint, reduce_lr])
 
         elif steps == 'fine':
 
             self.history = self.model.fit_generator(
                                 self.train_generator,
-                                steps_per_epoch=150,
+                                steps_per_epoch=self.num_train//self.batch_size,
                                 epochs=125,
                                 validation_data=self.validation_generator,
-                                validation_steps=50,
+                                validation_steps=self.num_val//self.batch_size,
                                 callbacks=[checkpoint, tensorboard, reduce_lr])
 
     def train(self):
