@@ -63,6 +63,9 @@ class ClassifierCNN:
         self.model_path = os.path.join(self.model_dir, self.model_name)
         self.logs_path = os.path.join(self.logs_root, self.logs_name)
 
+        if os.path.exists(self.model_dir) is False:
+            os.makedirs(self.model_dir)
+
         self.backbone = backbone
         self.define_dataset(dataset)
 
