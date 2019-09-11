@@ -80,7 +80,7 @@ class ClassifierCNN:
         self.width = 224
         self.batch_size = 2
         self.loss = 'default'
-        self.lrate=0.0001
+        self.lrate=0.00001
         self.layers = 19
 
     def draw_plots(self):
@@ -363,10 +363,10 @@ class ClassifierCNN:
         if steps == 'init':
             self.history = self.model.fit_generator(
                                 self.train_generator,
-                                steps_per_epoch=100,
+                                steps_per_epoch=150,
                                 epochs=25,
                                 validation_data=self.validation_generator,
-                                validation_steps=50,
+                                validation_steps=150,
                                 callbacks=[checkpoint, reduce_lr])
 
         elif steps == 'fine':
@@ -376,10 +376,10 @@ class ClassifierCNN:
                                 steps_per_epoch=150,
                                 epochs=25,
                                 validation_data=self.validation_generator,
-                                validation_steps=50,
+                                validation_steps=150,
                                 callbacks=[checkpoint, tensorboard, reduce_lr])
             saver = tf.train.Saver()
-            sess = keras.backend.get_session()
+            sess = K.get_session()
             saver.save(sess, os.path.join(self.models_dir, 'session.ckpt'))
 
         # # fit model
