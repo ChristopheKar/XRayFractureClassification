@@ -364,7 +364,7 @@ class ClassifierCNN:
             self.history = self.model.fit_generator(
                                 self.train_generator,
                                 steps_per_epoch=150,
-                                epochs=25,
+                                epochs=16,
                                 validation_data=self.validation_generator,
                                 validation_steps=150,
                                 callbacks=[checkpoint, reduce_lr])
@@ -374,7 +374,7 @@ class ClassifierCNN:
             self.history = self.model.fit_generator(
                                 self.train_generator,
                                 steps_per_epoch=150,
-                                epochs=25,
+                                epochs=16,
                                 validation_data=self.validation_generator,
                                 validation_steps=150,
                                 callbacks=[checkpoint, tensorboard, reduce_lr])
