@@ -359,7 +359,7 @@ class ClassifierCNN:
                            verbose=1,
                            patience=20)
 
-        sess = tf.train.MonitoredSession()
+        sess = tf.Session()
         sess.graph._finalized = False
 
         # fit model
@@ -367,7 +367,7 @@ class ClassifierCNN:
             self.history = self.model.fit_generator(
                                 self.train_generator,
                                 steps_per_epoch=150,
-                                epochs=5,
+                                epochs=3,
                                 validation_data=self.validation_generator,
                                 validation_steps=150,
                                 callbacks=[checkpoint, reduce_lr])
@@ -377,7 +377,7 @@ class ClassifierCNN:
             self.history = self.model.fit_generator(
                                 self.train_generator,
                                 steps_per_epoch=150,
-                                epochs=5,
+                                epochs=3,
                                 validation_data=self.validation_generator,
                                 validation_steps=150,
                                 callbacks=[checkpoint, tensorboard, reduce_lr])
