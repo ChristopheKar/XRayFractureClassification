@@ -67,7 +67,7 @@ class ClassifierCNN:
             os.makedirs(self.model_dir)
 
         self.backbone = backbone
-        self.define_dataset(dataset)
+        self.define_dataset(dataset)0
 
         if self.classes == 1:
             self.class_mode = 'binary'
@@ -380,7 +380,7 @@ class ClassifierCNN:
                                 callbacks=[checkpoint, tensorboard, reduce_lr])
             saver = tf.train.Saver()
             sess = K.get_session()
-            saver.save(sess, os.path.join(self.models_dir, 'session.ckpt'))
+            saver.save(sess, os.path.join(self.model_dir, 'session.ckpt'))
 
         # # fit model
         # if steps == 'init':
