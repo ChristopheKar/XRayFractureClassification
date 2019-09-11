@@ -359,7 +359,7 @@ class ClassifierCNN:
                            verbose=1,
                            patience=20)
 
-        sess = tf.train.SingularMonitoredSession()
+        sess = tf.train.MonitoredSession()
 
         # fit model
         if steps == 'init':
