@@ -19,7 +19,7 @@ from sklearn.metrics import roc_auc_score
 from sklearn.metrics import confusion_matrix
 
 # import keras utilities and layers
-import tensorflow as tf
+# import tensorflow as tf
 from keras import backend as K
 from keras.models import load_model
 from keras.models import Model, Sequential
@@ -38,10 +38,10 @@ from keras.applications.nasnet import NASNetLarge, NASNetMobile
 from keras.applications.vgg16 import VGG16
 from keras.applications.densenet import DenseNet121, DenseNet169, DenseNet201
 
-os.environ['PYTHONHASHSEED'] = '0'
-np.random.seed(70)
-rn.seed(70)
-tf.set_random_seed(70)
+# os.environ['PYTHONHASHSEED'] = '0'
+# np.random.seed(70)
+# rn.seed(70)
+# tf.set_random_seed(70)
 
 class ClassifierCNN:
 
@@ -359,9 +359,9 @@ class ClassifierCNN:
                            verbose=1,
                            patience=20)
 
-        sess = tf.Session()
-        sess.graph._finalized = False
-        K.get_session().run(tf.global_variables_initializer()) 
+        # sess = tf.Session()
+        # sess.graph._finalized = False
+        # K.get_session().run(tf.global_variables_initializer())
 
         # fit model
         if steps == 'init':
@@ -387,8 +387,8 @@ class ClassifierCNN:
             # sess = K.get_session()
             # saver.save(sess, os.path.join(self.model_dir, 'session.ckpt'))
 
-            with sess.as_default():
-                self.model.save(self.model_path)
+            # with sess.as_default():
+            #     self.model.save(self.model_path)
 
         # # fit model
         # if steps == 'init':
