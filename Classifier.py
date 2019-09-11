@@ -387,7 +387,7 @@ class ClassifierCNN:
             # saver.save(sess, os.path.join(self.model_dir, 'session.ckpt'))
 
             with sess.as_default():
-                model.save(self.model_path)
+                self.model.save(self.model_path)
 
         # # fit model
         # if steps == 'init':
