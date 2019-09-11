@@ -361,6 +361,7 @@ class ClassifierCNN:
 
         sess = tf.Session()
         sess.graph._finalized = False
+        K.get_session().run(tf.global_variables_initializer()) 
 
         # fit model
         if steps == 'init':
