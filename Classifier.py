@@ -4,6 +4,7 @@ import os
 import time
 import math
 import numpy as np
+import random as rn
 from shutil import copyfile
 import matplotlib.pyplot as plt
 
@@ -18,6 +19,7 @@ from sklearn.metrics import roc_auc_score
 from sklearn.metrics import confusion_matrix
 
 # import keras utilities and layers
+import tensorflow as tf
 from keras import backend as K
 from keras.models import load_model
 from keras.models import Model, Sequential
@@ -36,6 +38,11 @@ from keras.applications.nasnet import NASNetLarge, NASNetMobile
 from keras.applications.vgg16 import VGG16
 from keras.applications.densenet import DenseNet121, DenseNet169, DenseNet201
 
+os.environ['PYTHONHASHSEED'] = '0'
+np.random.seed(70)
+rn.seed(70)
+tf.set_random_seed(70)
+
 class ClassifierCNN:
 
     def __init__(self, backbone, dataset, model_name):
@@ -52,7 +59,8 @@ class ClassifierCNN:
         self.model_name = model_name + '.h5'
         self.logs_name = model_name
 
-        self.model_path = os.path.join(self.models_root, self.model_name)
+        self.model_dir = os.path.join(self.models_root, model_name)
+        self.model_path = os.path.join(self.model_dir, self.model_name)
         self.logs_path = os.path.join(self.logs_root, self.logs_name)
 
         self.backbone = backbone
@@ -363,10 +371,13 @@ class ClassifierCNN:
             self.history = self.model.fit_generator(
                                 self.train_generator,
                                 steps_per_epoch=150,
-                                epochs=125,
+                                epochs=25,
                                 validation_data=self.validation_generator,
                                 validation_steps=50,
                                 callbacks=[checkpoint, tensorboard, reduce_lr])
+            saver = tf.train.Saver()
+            sess = keras.backend.get_session()
+            saver.save(sess, os.path.join(self.models_dir, 'session.ckpt'))
 
         # # fit model
         # if steps == 'init':
