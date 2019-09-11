@@ -360,6 +360,7 @@ class ClassifierCNN:
                            patience=20)
 
         sess = tf.train.MonitoredSession()
+        sess.graph._finalized = False
 
         # fit model
         if steps == 'init':
