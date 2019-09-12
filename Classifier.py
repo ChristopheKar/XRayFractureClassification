@@ -47,7 +47,7 @@ class ClassifierCNN:
 
     def __init__(self, backbone, dataset, model_name):
 
-        K.clear_session()
+        # K.clear_session()
 
         self.home = os.environ['HOME']
 
