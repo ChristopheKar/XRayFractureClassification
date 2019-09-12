@@ -344,11 +344,11 @@ class ClassifierCNN:
                                      save_weights_only=False,
                                      mode='auto',
                                      period=1)
-        # log to tensorboard
-        tensorboard = TensorBoard(log_dir=self.logs_path,
-                                  histogram_freq=0,
-                                  write_graph=True,
-                                  write_images=False)
+        # # log to tensorboard
+        # tensorboard = TensorBoard(log_dir=self.logs_path,
+        #                           histogram_freq=0,
+        #                           write_graph=True,
+        #                           write_images=False)
 
         # set up learning rate schedule
         lrate = LearningRateScheduler(self.step_decay)
@@ -381,7 +381,7 @@ class ClassifierCNN:
                                 epochs=3,
                                 validation_data=self.validation_generator,
                                 validation_steps=150,
-                                callbacks=[checkpoint, tensorboard, reduce_lr])
+                                callbacks=[checkpoint, reduce_lr])
 
             # saver = tf.train.Saver()
             # sess = K.get_session()
