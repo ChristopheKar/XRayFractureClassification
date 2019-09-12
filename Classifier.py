@@ -78,9 +78,9 @@ class ClassifierCNN:
 
         self.height = 224
         self.width = 224
-        self.batch_size = 2
+        self.batch_size = 8
         self.loss = 'default'
-        self.lrate=0.00001
+        self.lrate=0.0001
         self.layers = 19
 
     def draw_plots(self):
@@ -370,7 +370,7 @@ class ClassifierCNN:
                                 steps_per_epoch=150,
                                 epochs=3,
                                 validation_data=self.validation_generator,
-                                validation_steps=150,
+                                validation_steps=self.num_val//self.batch_size,
                                 callbacks=[checkpoint, reduce_lr])
 
         elif steps == 'fine':
@@ -380,7 +380,7 @@ class ClassifierCNN:
                                 steps_per_epoch=150,
                                 epochs=3,
                                 validation_data=self.validation_generator,
-                                validation_steps=150,
+                                validation_steps=self.num_val//self.batch_size,
                                 callbacks=[checkpoint, reduce_lr])
 
             # saver = tf.train.Saver()
