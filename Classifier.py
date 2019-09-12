@@ -59,12 +59,8 @@ class ClassifierCNN:
         self.model_name = model_name + '.h5'
         self.logs_name = model_name
 
-        self.model_dir = os.path.join(self.models_root, model_name)
-        self.model_path = os.path.join(self.model_dir, self.model_name)
+        self.model_path = os.path.join(self.models_root, self.model_name)
         self.logs_path = os.path.join(self.logs_root, self.logs_name)
-
-        if os.path.exists(self.model_dir) is False:
-            os.makedirs(self.model_dir)
 
         self.backbone = backbone
         self.define_dataset(dataset)
