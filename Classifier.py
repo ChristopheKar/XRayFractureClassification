@@ -359,8 +359,8 @@ class ClassifierCNN:
         if steps == 'init':
             self.history = self.model.fit_generator(
                                 self.train_generator,
-                                steps_per_epoch=150,
-                                epochs=10,
+                                steps_per_epoch=200,
+                                epochs=25,
                                 validation_data=self.validation_generator,
                                 validation_steps=self.num_val//self.batch_size,
                                 callbacks=[checkpoint, reduce_lr])
@@ -369,8 +369,8 @@ class ClassifierCNN:
 
             self.history = self.model.fit_generator(
                                 self.train_generator,
-                                steps_per_epoch=150,
-                                epochs=10,
+                                steps_per_epoch=200,
+                                epochs=100,
                                 validation_data=self.validation_generator,
                                 validation_steps=self.num_val//self.batch_size,
                                 callbacks=[checkpoint, reduce_lr])
