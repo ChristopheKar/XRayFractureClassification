@@ -359,16 +359,12 @@ class ClassifierCNN:
                            verbose=1,
                            patience=20)
 
-        # sess = tf.Session()
-        # sess.graph._finalized = False
-        # K.get_session().run(tf.global_variables_initializer())
-
         # fit model
         if steps == 'init':
             self.history = self.model.fit_generator(
                                 self.train_generator,
                                 steps_per_epoch=150,
-                                epochs=3,
+                                epochs=10,
                                 validation_data=self.validation_generator,
                                 validation_steps=self.num_val//self.batch_size,
                                 callbacks=[checkpoint, reduce_lr])
@@ -378,17 +374,10 @@ class ClassifierCNN:
             self.history = self.model.fit_generator(
                                 self.train_generator,
                                 steps_per_epoch=150,
-                                epochs=3,
+                                epochs=10,
                                 validation_data=self.validation_generator,
                                 validation_steps=self.num_val//self.batch_size,
                                 callbacks=[checkpoint, reduce_lr])
-
-            # saver = tf.train.Saver()
-            # sess = K.get_session()
-            # saver.save(sess, os.path.join(self.model_dir, 'session.ckpt'))
-
-            # with sess.as_default():
-            #     self.model.save(self.model_path)
 
         # # fit model
         # if steps == 'init':
