@@ -38,10 +38,6 @@ from keras.applications.nasnet import NASNetLarge, NASNetMobile
 from keras.applications.vgg16 import VGG16
 from keras.applications.densenet import DenseNet121, DenseNet169, DenseNet201
 
-# os.environ['PYTHONHASHSEED'] = '0'
-# np.random.seed(70)
-# rn.seed(70)
-# tf.set_random_seed(70)
 
 class ClassifierCNN:
 
@@ -353,13 +349,13 @@ class ClassifierCNN:
         es = EarlyStopping(monitor='val_acc',
                            mode='max',
                            verbose=1,
-                           patience=20)
+                           patience=10)
 
         # fit model
         if steps == 'init':
             self.history = self.model.fit_generator(
                                 self.train_generator,
-                                steps_per_epoch=200,
+                                steps_per_epoch=150,
                                 epochs=25,
                                 validation_data=self.validation_generator,
                                 validation_steps=self.num_val//self.batch_size,
@@ -369,11 +365,11 @@ class ClassifierCNN:
 
             self.history = self.model.fit_generator(
                                 self.train_generator,
-                                steps_per_epoch=200,
+                                steps_per_epoch=150,
                                 epochs=100,
                                 validation_data=self.validation_generator,
                                 validation_steps=self.num_val//self.batch_size,
-                                callbacks=[checkpoint, reduce_lr])
+                                callbacks=[checkpoint, reduce_lr, es])
 
         # # fit model
         # if steps == 'init':
