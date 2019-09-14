@@ -144,12 +144,23 @@ if __name__ == '__main__':
     # cls.layers = 50
     # cls.train()
 
-    cls = ClassifierCNN(DenseNet169, 'MURA_WRIST', 'd169_mura_wrist_224_new')
+    # cls = ClassifierCNN(DenseNet169, 'MURA_WRIST', 'd169_mura_wrist_224_new')
+    # cls.layers = 224
+    # cls.train()
+    # cls = ClassifierCNN(DenseNet169, 'MURA_ALL', 'd169_mura_class_224_new')
+    # cls.layers = 224
+    # cls.train()
+    # cls = ClassifierCNN('d169_mura_class_224_new.h5', 'MURA_WRIST', 'd169_mura_wrist_224_224_new')
+    # cls.layers = 224
+    # cls.train()
+
+    cls = ClassifierCNN(DenseNet169, 'AUB_DIS', 'd169_aub_dis_224_v1')
     cls.layers = 224
     cls.train()
-    cls = ClassifierCNN(DenseNet169, 'MURA_ALL', 'd169_mura_class_224_new')
-    cls.layers = 224
+
+    cls = ClassifierCNN('d169_mura_class_224_new.h5', 'AUB_DIS', 'd169_aub_dis_224_112_v1')
+    cls.layers = 112
     cls.train()
-    cls = ClassifierCNN('d169_mura_class_224_new.h5', 'MURA_WRIST', 'd169_mura_wrist_224_224_new')
-    cls.layers = 224
-    cls.train()
+
+# cls = ClassifierCNN(DenseNet169, 'AUB_WRIST', 'd169_aub_wrist_224_new')   # 0.74317 (ep15)
+# cls = ClassifierCNN('d169_mura_class_224_new.h5', 'AUB_WRIST', 'd169_aub_wrist_224_112_new')  # 0.77994 (ep18)
