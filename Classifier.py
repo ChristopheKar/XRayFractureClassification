@@ -176,6 +176,12 @@ class ClassifierCNN:
 
     def define_dataset(self, dataset):
 
+        if dataset == 'AUB_DIS':
+            dataset_base = os.path.join(self.datasets_root, 'aub_wrist')
+            self.num_train = 17440
+            self.num_val = 2175
+            self.classes = 3
+
         if dataset == 'AUB_WRIST':
             dataset_base = os.path.join(self.datasets_root, 'split')
             self.num_train = 15220
