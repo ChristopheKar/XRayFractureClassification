@@ -154,11 +154,11 @@ if __name__ == '__main__':
     # cls.layers = 224
     # cls.train()
 
-    cls = ClassifierCNN(DenseNet169, 'AUB_DIS', 'd169_aub_dis_224_v1')
+    cls = ClassifierCNN(DenseNet169, 'AUB_DIS', 'd169_aub_dis_224_v2')
     cls.layers = 224
     cls.train()
 
-    cls = ClassifierCNN('d169_mura_class_224_new.h5', 'AUB_DIS', 'd169_aub_dis_224_112_v1')
+    cls = ClassifierCNN('d169_mura_class_224_new.h5', 'AUB_DIS', 'd169_aub_dis_224_112_v2')
     cls.layers = 112
     cls.train()
 
