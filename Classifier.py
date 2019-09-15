@@ -295,7 +295,7 @@ class ClassifierCNN:
         self.class_weights = class_weight.compute_class_weight(
                                         'balanced',
                                         np.unique(train_generator.classes),
-                                        train_generator.classes
+                                        self.train_generator.classes
                                         )
 
     def create_fclayer(self, conv_base, pre=False):
