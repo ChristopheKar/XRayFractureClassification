@@ -294,7 +294,7 @@ class ClassifierCNN:
 
         self.class_weights = class_weight.compute_class_weight(
                                         'balanced',
-                                        np.unique(train_generator.classes),
+                                        np.unique(self.train_generator.classes),
                                         self.train_generator.classes
                                         )
 
