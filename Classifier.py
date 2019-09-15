@@ -27,6 +27,7 @@ from keras.layers import Dense, GlobalAveragePooling2D, Dropout, BatchNormalizat
 from keras.optimizers import Adam
 from keras_preprocessing.image import ImageDataGenerator
 from keras.callbacks import ModelCheckpoint, LearningRateScheduler, TensorBoard, EarlyStopping, ReduceLROnPlateau
+from sklearn.utils import class_weight
 
 from losses import binary_focal_loss, categorical_focal_loss
 
@@ -291,6 +292,12 @@ class ClassifierCNN:
             batch_size = self.batch_size,
             class_mode = self.class_mode)
 
+        self.class_weights = class_weight.compute_class_weight(
+                                        'balanced',
+                                        np.unique(train_generator.classes),
+                                        train_generator.classes
+                                        )
+
     def create_fclayer(self, conv_base, pre=False):
 
         conv_base.trainable = False
@@ -388,7 +395,8 @@ class ClassifierCNN:
                                 epochs=25,
                                 validation_data=self.validation_generator,
                                 validation_steps=self.num_val//self.batch_size,
-                                callbacks=[checkpoint, reduce_lr])
+                                callbacks=[checkpoint, reduce_lr],
+                                class_weight=self.class_weights)
 
         elif steps == 'fine':
 
@@ -398,7 +406,8 @@ class ClassifierCNN:
                                 epochs=100,
                                 validation_data=self.validation_generator,
                                 validation_steps=self.num_val//self.batch_size,
-                                callbacks=[checkpoint, reduce_lr, es])
+                                callbacks=[checkpoint, reduce_lr, es],
+                                class_weight=self.class_weights)
 
         # # fit model
         # if steps == 'init':
