@@ -66,8 +66,7 @@ class ClassifierCNN:
             self.activation = 'sigmoid'
         elif self.classes > 1:
             self.class_mode = 'categorical'
-            self.activation = 'sigmoid'
-            # self.activation = 'softmax'
+            self.activation = 'softmax'
 
 
         self.height = 224
