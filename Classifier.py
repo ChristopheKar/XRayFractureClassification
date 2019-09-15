@@ -28,7 +28,7 @@ from keras.optimizers import Adam
 from keras_preprocessing.image import ImageDataGenerator
 from keras.callbacks import ModelCheckpoint, LearningRateScheduler, TensorBoard, EarlyStopping, ReduceLROnPlateau
 
-# from losses import binary_focal_loss, categorical_focal_loss
+from losses import binary_focal_loss, categorical_focal_loss
 
 # import keras models
 from keras.applications.inception_v3 import InceptionV3
