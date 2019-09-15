@@ -39,6 +39,28 @@ from keras.applications.vgg16 import VGG16
 from keras.applications.densenet import DenseNet121, DenseNet169, DenseNet201
 
 
+def f1_score(y_true, y_pred):
+
+    # Count positive samples.
+    c1 = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
+    c2 = K.sum(K.round(K.clip(y_pred, 0, 1)))
+    c3 = K.sum(K.round(K.clip(y_true, 0, 1)))
+
+    # If there are no true samples, fix the F1 score at 0.
+    if c3 == 0:
+        return 0
+
+    # How many selected items are relevant?
+    precision = c1 / c2
+
+    # How many relevant items are selected?
+    recall = c1 / c3
+
+    # Calculate f1_score
+    f1_score = 2 * (precision * recall) / (precision + recall)
+    return f1_score
+
+
 class ClassifierCNN:
 
     def __init__(self, backbone, dataset, model_name):
@@ -317,13 +339,13 @@ class ClassifierCNN:
         if self.loss == 'default' and self.classes > 1:
             loss_f = 'categorical_crossentropy'
         if self.loss == 'focal' and self.classes == 1:
-            loss_f = [binary_focal_loss(alpha=.25, gamma=2)]
+            loss_f = binary_focal_loss(alpha=.25, gamma=2)
         if self.loss == 'focal' and self.classes > 1:
-            loss_f = [categorical_focal_loss(alpha=.25, gamma=2)]
+            loss_f = categorical_focal_loss(alpha=.25, gamma=2)
 
         self.model.compile(loss=loss_f,
                            optimizer=adam,
-                           metrics=['accuracy'])
+                           metrics=['accuracy', f1_score])
 
     def fit_model(self, steps='init'):
 
