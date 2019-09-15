@@ -2,7 +2,7 @@
 Define our custom loss function.
 """
 from keras import backend as K
-import tensorflow as tf
+# import tensorflow as tf
 
 def binary_focal_loss(gamma=2., alpha=.25):
     """
@@ -24,8 +24,10 @@ def binary_focal_loss(gamma=2., alpha=.25):
         :param y_pred:  A tensor resulting from a sigmoid
         :return: Output tensor.
         """
-        pt_1 = tf.where(tf.equal(y_true, 1), y_pred, tf.ones_like(y_pred))
-        pt_0 = tf.where(tf.equal(y_true, 0), y_pred, tf.zeros_like(y_pred))
+        # pt_1 = tf.where(tf.equal(y_true, 1), y_pred, tf.ones_like(y_pred))
+        # pt_0 = tf.where(tf.equal(y_true, 0), y_pred, tf.zeros_like(y_pred))
+        pt_1 = np.where(np.equal(y_true, 1), y_pred, np.ones_like(y_pred))
+        pt_0 = np.where(np.equal(y_true, 0), y_pred, np.zeros_like(y_pred))
 
         epsilon = K.epsilon()
         # clip to prevent NaN's and Inf's
