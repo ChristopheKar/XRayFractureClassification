@@ -284,13 +284,15 @@ class ClassifierCNN:
             self.train_dir,
             target_size = (self.height, self.width),
             batch_size = self.batch_size,
-            class_mode = self.class_mode)
+            class_mode = self.class_mode,
+            classes = ['displaced', 'nondisplaced'])
 
         self.validation_generator = validation_datagen.flow_from_directory(
             self.val_dir,
             target_size = (self.height, self.width),
             batch_size = self.batch_size,
-            class_mode = self.class_mode)
+            class_mode = self.class_mode,
+            classes = ['displaced', 'nondisplaced'])
 
         self.class_weights = class_weight.compute_class_weight(
                                         'balanced',
@@ -408,26 +410,6 @@ class ClassifierCNN:
                                 validation_steps=self.num_val//self.batch_size,
                                 callbacks=[checkpoint, reduce_lr, es],
                                 class_weight=self.class_weights)
-
-        # # fit model
-        # if steps == 'init':
-        #     self.history = self.model.fit_generator(
-        #                         self.train_generator,
-        #                         steps_per_epoch=self.num_train//self.batch_size,
-        #                         epochs=25,
-        #                         validation_data=self.validation_generator,
-        #                         validation_steps=self.num_val//self.batch_size,
-        #                         callbacks=[checkpoint, reduce_lr])
-        #
-        # elif steps == 'fine':
-        #
-        #     self.history = self.model.fit_generator(
-        #                         self.train_generator,
-        #                         steps_per_epoch=self.num_train//self.batch_size,
-        #                         epochs=125,
-        #                         validation_data=self.validation_generator,
-        #                         validation_steps=self.num_val//self.batch_size,
-        #                         callbacks=[checkpoint, tensorboard, reduce_lr])
 
     def train(self):
 
