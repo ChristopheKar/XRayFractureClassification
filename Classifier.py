@@ -330,7 +330,7 @@ class ClassifierCNN:
 
         self.model.compile(loss=loss_f,
                            optimizer=adam,
-                           metrics=['accuracy', f1_score])
+                           metrics=['accuracy'])
 
     def fit_model(self, steps='init'):
 
