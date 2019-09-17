@@ -39,29 +39,6 @@ from keras.applications.nasnet import NASNetLarge, NASNetMobile
 from keras.applications.vgg16 import VGG16
 from keras.applications.densenet import DenseNet121, DenseNet169, DenseNet201
 
-
-def f1_score(y_true, y_pred):
-
-    # Count positive samples.
-    c1 = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
-    c2 = K.sum(K.round(K.clip(y_pred, 0, 1)))
-    c3 = K.sum(K.round(K.clip(y_true, 0, 1)))
-
-    # If there are no true samples, fix the F1 score at 0.
-    if c3 == 0:
-        return 0
-
-    # How many selected items are relevant?
-    precision = c1 / c2
-
-    # How many relevant items are selected?
-    recall = c1 / c3
-
-    # Calculate f1_score
-    f1_score = 2 * (precision * recall) / (precision + recall)
-    return f1_score
-
-
 class ClassifierCNN:
 
     def __init__(self, backbone, dataset, model_name):
@@ -70,7 +47,7 @@ class ClassifierCNN:
 
         self.home = os.environ['HOME']
 
-        self.global_root = os.path.join(self.home, 'wrist/classification')
+        self.global_root = os.patpythh.join(self.home, 'wrist/classification')
         self.models_root = os.path.join(self.global_root, 'models')
         self.logs_root = os.path.join(self.global_root, 'logs')
         self.datasets_root = os.path.join(self.home, 'wrist/datasets')
@@ -297,8 +274,7 @@ class ClassifierCNN:
         self.class_weights = class_weight.compute_class_weight(
                                         'balanced',
                                         np.unique(self.train_generator.classes),
-                                        self.train_generator.classes
-                                        )
+                                        self.train_generator.classes)
 
     def create_fclayer(self, conv_base, pre=False):
 
