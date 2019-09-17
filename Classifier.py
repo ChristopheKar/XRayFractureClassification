@@ -47,7 +47,7 @@ class ClassifierCNN:
 
         self.home = os.environ['HOME']
 
-        self.global_root = os.patpythh.join(self.home, 'wrist/classification')
+        self.global_root = os.path.join(self.home, 'wrist/classification')
         self.models_root = os.path.join(self.global_root, 'models')
         self.logs_root = os.path.join(self.global_root, 'logs')
         self.datasets_root = os.path.join(self.home, 'wrist/datasets')
