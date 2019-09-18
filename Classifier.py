@@ -399,9 +399,14 @@ class ClassifierCNN:
             base_model.summary()
             self.create_fclayer(base_model, True)
         else:
+            if self.scratch is True:
+                w = None
+            else:
+                w = 'imagenet'
+
             base_model = self.backbone(include_top=False,
                                        input_shape = (self.height,self.width,3),
-                                       weights='imagenet')
+                                       weights=w)
             self.create_fclayer(base_model)
 
         self.load_dataset_generators()
