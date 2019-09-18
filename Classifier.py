@@ -241,6 +241,7 @@ class ClassifierCNN:
 
         self.train_dir = os.path.join(dataset_base, 'train')
         self.val_dir = os.path.join(dataset_base, 'valid')
+        self.data_classes = [f for f in os.listdir(self.train_dir) if os.path.isdir(f)]
 
     def load_dataset_generators(self):
 
@@ -262,14 +263,14 @@ class ClassifierCNN:
             target_size = (self.height, self.width),
             batch_size = self.batch_size,
             class_mode = self.class_mode,
-            classes = ['displaced', 'nondisplaced'])
+            classes = self.data_classes)
 
         self.validation_generator = validation_datagen.flow_from_directory(
             self.val_dir,
             target_size = (self.height, self.width),
             batch_size = self.batch_size,
             class_mode = self.class_mode,
-            classes = ['displaced', 'nondisplaced'])
+            classes = self.data_classes)
 
         self.class_weights = class_weight.compute_class_weight(
                                         'balanced',
