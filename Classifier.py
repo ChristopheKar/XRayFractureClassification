@@ -75,6 +75,7 @@ class ClassifierCNN:
         self.loss = 'default'
         self.lrate=0.0001
         self.layers = 19
+        self.scratch = False
 
     def draw_plots(self):
 
