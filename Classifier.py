@@ -184,6 +184,12 @@ class ClassifierCNN:
             self.num_val = 2175
             self.classes = 3
 
+        if dataset == 'TEST':
+            dataset_base = os.path.join(self.datasets_root, 'new')
+            self.num_train = 1195
+            self.num_val = 312
+            self.classes = 1
+
         if dataset == 'AUB_WRIST':
             dataset_base = os.path.join(self.datasets_root, 'split')
             self.num_train = 15220
