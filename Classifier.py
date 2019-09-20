@@ -184,6 +184,12 @@ class ClassifierCNN:
             self.num_val = 2175
             self.classes = 3
 
+        if dataset == 'AUB_NEW':
+            dataset_base = os.path.join(self.datasets_root, 'new_aub')
+            self.num_train =
+            self.num_val =
+            self.classes = 1
+
         if dataset == 'TEST':
             dataset_base = os.path.join(self.datasets_root, 'new')
             self.num_train = 1195
@@ -371,7 +377,7 @@ class ClassifierCNN:
         es = EarlyStopping(monitor='val_acc',
                            mode='max',
                            verbose=1,
-                           patience=10)
+                           patience=30)
 
         # fit model
         if steps == 'init':
