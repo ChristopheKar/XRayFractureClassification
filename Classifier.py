@@ -178,11 +178,11 @@ class ClassifierCNN:
 
     def define_dataset(self, dataset):
 
-        if dataset == 'AUB_DIS':
-            dataset_base = os.path.join(self.datasets_root, 'aub_wrist')
-            self.num_train = 17440
-            self.num_val = 2175
-            self.classes = 3
+        if dataset == 'AUB_DISP':
+            dataset_base = os.path.join(self.datasets_root, 'aub_disp')
+            self.num_train = 3419
+            self.num_val = 380
+            self.classes = 1
 
         if dataset == 'AUB_NEW':
             dataset_base = os.path.join(self.datasets_root, 'new_aub')
@@ -190,10 +190,10 @@ class ClassifierCNN:
             self.num_val = 569
             self.classes = 1
 
-        if dataset == 'TEST':
-            dataset_base = os.path.join(self.datasets_root, 'new')
-            self.num_train = 1195
-            self.num_val = 312
+        if dataset == 'AUB_FRAC':
+            dataset_base = os.path.join(self.datasets_root, 'aub_fracture')
+            self.num_train = 6151
+            self.num_val = 683
             self.classes = 1
 
         if dataset == 'AUB_WRIST':
@@ -377,7 +377,7 @@ class ClassifierCNN:
         es = EarlyStopping(monitor='val_acc',
                            mode='max',
                            verbose=1,
-                           patience=30)
+                           patience=15)
 
         # fit model
         if steps == 'init':
