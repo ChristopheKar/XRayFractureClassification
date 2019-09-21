@@ -76,6 +76,7 @@ class ClassifierCNN:
         self.lrate=0.0001
         self.layers = 19
         self.scratch = False
+        self.total_time = 0
 
     def draw_plots(self):
 
