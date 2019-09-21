@@ -120,6 +120,8 @@ class ClassifierCNN:
         Y_pred = self.model.predict_generator(img_generator, steps=nb_samples)
         pred_prob = np.array([a[0] for a in Y_pred])
         pred_classes = pred_prob.round().astype('int32')
+        self.pred_classes = pred_classes
+        self.pred_prob = pred_prob
 
         metrics = ''
         # accuracy: (tp + tn) / (p + n)
