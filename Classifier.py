@@ -187,6 +187,12 @@ class ClassifierCNN:
             self.num_val = 380
             self.classes = 1
 
+        if dataset == 'AUB_DISP2':
+            dataset_base = os.path.join(self.datasets_root, 'aub_disp2')
+            self.num_train = 923
+            self.num_val = 97
+            self.classes = 1
+
         if dataset == 'AUB_NEW':
             dataset_base = os.path.join(self.datasets_root, 'new_aub')
             self.num_train = 5127
