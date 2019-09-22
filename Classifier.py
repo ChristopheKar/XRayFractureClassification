@@ -77,6 +77,7 @@ class ClassifierCNN:
         self.layers = 19
         self.scratch = False
         self.total_time = 0
+        self.es_patience = 10
 
     def draw_plots(self):
 
@@ -386,7 +387,7 @@ class ClassifierCNN:
         es = EarlyStopping(monitor='val_acc',
                            mode='max',
                            verbose=1,
-                           patience=15)
+                           patience=self.es_patience)
 
         # fit model
         if steps == 'init':
