@@ -9,7 +9,6 @@ from shutil import copyfile
 import matplotlib.pyplot as plt
 
 # import metrics
-from sklearn.datasets import make_circles
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import precision_score
 from sklearn.metrics import recall_score
@@ -26,7 +25,7 @@ from keras.models import Model, Sequential
 from keras.layers import Dense, GlobalAveragePooling2D, Dropout, BatchNormalization, Flatten
 from keras.optimizers import Adam
 from keras_preprocessing.image import ImageDataGenerator
-from keras.callbacks import ModelCheckpoint, LearningRateScheduler, TensorBoard, EarlyStopping, ReduceLROnPlateau
+from keras.callbacks import ModelCheckpoint, LearningRateScheduler, TensorBoard, EarlyStopping, ReduceLROnPlateau, CSVLogger
 from sklearn.utils import class_weight
 
 from losses import binary_focal_loss, categorical_focal_loss
@@ -191,7 +190,6 @@ class ClassifierCNN:
         if dataset == 'AUB_DISP2':
             dataset_base = os.path.join(self.datasets_root, 'aub_disp2')
             self.num_train = 11018
-            self.num_val = 1224
             self.classes = 1
 
         if dataset == 'AUB_NEW':
@@ -388,6 +386,10 @@ class ClassifierCNN:
                            mode='max',
                            verbose=1,
                            patience=self.es_patience)
+
+        csv_logger = CSVLogger(os.path.join(self.metrics_path, 'training.log'),
+                               separator=',',
+                               append=False)
 
         # fit model
         if steps == 'init':
