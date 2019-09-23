@@ -78,6 +78,10 @@ class ClassifierCNN:
         self.total_time = 0
         self.es_patience = 10
 
+        self.metrics_path = os.path.join(self.logs_path, 'metrics')
+        if not os.path.exists(self.metrics_path):
+            os.makedirs(self.metrics_path)
+
     def draw_plots(self):
 
         acc = self.history.history['acc']
