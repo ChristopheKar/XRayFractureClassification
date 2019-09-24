@@ -3,7 +3,7 @@ import numpy as np
 from PIL import Image
 from matplotlib import pyplot as plt
 from keras.models import Model, load_model
-from keras.preprocessing import load_img, img_to_array
+from keras.preprocessing.image import load_img, img_to_array
 
 models_root = '/home/ubuntu/wrist/classification/models'
 
