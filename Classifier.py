@@ -215,13 +215,11 @@ class ClassifierCNN:
             self.num_val = 1904
             self.classes = 1
 
-
         if dataset == 'MURA_ALL':
             dataset_base = os.path.join(self.datasets_root, 'MURA_classification')
-            self.num_train = 36804
-            self.num_val = 3197
+            self.num_train = 52024
+            self.num_val = 5101
             self.classes = 7
-
 
         if dataset == 'MURA_WRIST':
             dataset_base = os.path.join(self.datasets_root, 'MURA_wrist')
