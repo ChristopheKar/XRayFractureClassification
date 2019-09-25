@@ -19,11 +19,13 @@ img = img_to_array(img)
 img = np.expand_dims(img, axis=0)
 img = img*1./255
 
-for m in model_paths[:-1]:
+for m in model_paths[-1]:
+    print('Loading model {:s}...'.format(m))
     model = load_model(os.path.join(models_root, m))
     layer_outputs = [model.layers[0].layers[c].output for c in conv]
     layer_names = [model.layers[0].layers[c].name for c in conv]
-    activation_model = Model(inputs=model.layers[0].inputs, outputs=layer_outputs)
+    activation_model = Model(inputs=model.layers[0].inputs, outputs=layer_outputs
+    print('Running activations...')
     activations = activation_model.predict(img)
     fig_names = []
     images_per_row = 16
