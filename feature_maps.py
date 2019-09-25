@@ -19,7 +19,7 @@ img = img_to_array(img)
 img = np.expand_dims(img, axis=0)
 img = img*1./255
 
-for m in model_paths[-1]:
+for m in model_paths[-1:]:
     print('Loading model {:s}...'.format(m))
     model = load_model(os.path.join(models_root, m))
     layer_outputs = [model.layers[0].layers[c].output for c in conv]
