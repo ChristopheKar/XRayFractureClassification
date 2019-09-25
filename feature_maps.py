@@ -24,7 +24,7 @@ for m in model_paths[-1]:
     model = load_model(os.path.join(models_root, m))
     layer_outputs = [model.layers[0].layers[c].output for c in conv]
     layer_names = [model.layers[0].layers[c].name for c in conv]
-    activation_model = Model(inputs=model.layers[0].inputs, outputs=layer_outputs
+    activation_model = Model(inputs=model.layers[0].inputs, outputs=layer_outputs)
     print('Running activations...')
     activations = activation_model.predict(img)
     fig_names = []
