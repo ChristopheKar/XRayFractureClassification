@@ -203,6 +203,12 @@ class ClassifierCNN:
             self.num_val = 569
             self.classes = 1
 
+        if dataset == 'AUB_NLP':
+            dataset_base = os.path.join(self.datasets_root, 'aub_nlp')
+            self.num_train = 3333
+            self.num_val = 370
+            self.classes = 1
+
         if dataset == 'AUB_FRAC':
             dataset_base = os.path.join(self.datasets_root, 'aub_fracture')
             self.num_train = 6151
