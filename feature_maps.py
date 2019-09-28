@@ -8,8 +8,8 @@ from keras.preprocessing.image import load_img, img_to_array
 models_root = '/home/ubuntu/wrist/classification/models'
 conv = [47, 135, 363, 591]
 conv = [12, 19, 58, 65]
-model_paths = ['d169_aub_wrist_224_relabeled.h5',
-               'd169_aub_wrist_224_112_relabeled.h5',
+model_paths = ['d169_aub_wrist_224_112_relabeled.h5',
+               'd169_aub_wrist_224_relabeled.h5',
                'd169_aub_wrist_scratch_relabeled.h5',
                'd169_aub_wrist_0_224_relabeled.h5']
 
@@ -19,7 +19,7 @@ img = img_to_array(img)
 img = np.expand_dims(img, axis=0)
 img = img*1./255
 
-for m in model_paths[1:2]:
+for m in model_paths[1:]:
     print('Loading model {:s}...'.format(m))
     model = load_model(os.path.join(models_root, m))
     layer_outputs = [model.layers[0].layers[c].output for c in conv]
