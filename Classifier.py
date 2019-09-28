@@ -205,8 +205,8 @@ class ClassifierCNN:
 
         if dataset == 'AUB_NLP':
             dataset_base = os.path.join(self.datasets_root, 'aub_nlp')
-            self.num_train = 3333
-            self.num_val = 370
+            self.num_train = 3334
+            self.num_val = 569
             self.classes = 1
 
         if dataset == 'AUB_FRAC':
@@ -419,7 +419,7 @@ class ClassifierCNN:
                                 epochs=100,
                                 validation_data=self.validation_generator,
                                 validation_steps=self.num_val//self.batch_size,
-                                callbacks=[checkpoint, reduce_lr, es],
+                                callbacks=[checkpoint, reduce_lr, es, csv_logger],
                                 class_weight=self.class_weights)
 
     def train(self):
