@@ -31,8 +31,8 @@ The `experiments.py` file provides the same example, and you can modify the file
 
 You can change many other variables, such as:
 
-..* Image Dimensions: `height` and `width` (make sure `height = weight`), default is `224`.
-..* Batch Size: `batch_size`.
-..* Loss: `loss`, set to `'default'` for categorical_crossentropy, or to `'focal'` for focal loss.
-..* Initial Learning Rate: `lrate` with default value of `0.0001`.
-..* Early Stopping Patience: `es_patience` with default set to `10`.
+* Image Dimensions: `height` and `width` (make sure `height = weight`), default is `224`.
+* Batch Size: `batch_size`.
+* Loss: `loss`, set to `'default'` for categorical_crossentropy, or to `'focal'` for focal loss.
+* Initial Learning Rate: `lrate` with default value of `0.0001`.
+* Early Stopping Patience: `es_patience` with default set to `10`.
