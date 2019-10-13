@@ -18,7 +18,6 @@ from sklearn.metrics import roc_auc_score
 from sklearn.metrics import confusion_matrix
 
 # import keras utilities and layers
-# import tensorflow as tf
 from keras import backend as K
 from keras.models import load_model
 from keras.models import Model, Sequential
@@ -28,7 +27,6 @@ from keras_preprocessing.image import ImageDataGenerator
 from keras.callbacks import ModelCheckpoint, LearningRateScheduler, TensorBoard, EarlyStopping, ReduceLROnPlateau, CSVLogger
 from sklearn.utils import class_weight
 
-from losses import binary_focal_loss, categorical_focal_loss
 
 # import keras models
 from keras.applications.inception_v3 import InceptionV3
@@ -38,11 +36,18 @@ from keras.applications.nasnet import NASNetLarge, NASNetMobile
 from keras.applications.vgg16 import VGG16
 from keras.applications.densenet import DenseNet121, DenseNet169, DenseNet201
 
+# check backend type and import tensorflow
+if K.backend() == 'tensorflow':
+    from losses import binary_focal_loss, categorical_focal_loss
+    import tensorflow as tf
+
+
 class ClassifierCNN:
 
     def __init__(self, backbone, dataset, model_name):
 
-        # K.clear_session()
+        if K.backend() == 'tensorflow':
+            K.clear_session()
 
         self.home = os.environ['HOME']
 
@@ -381,11 +386,11 @@ class ClassifierCNN:
                                      save_weights_only=False,
                                      mode='auto',
                                      period=1)
-        # # log to tensorboard
-        # tensorboard = TensorBoard(log_dir=self.logs_path,
-        #                           histogram_freq=0,
-        #                           write_graph=True,
-        #                           write_images=False)
+        # log to tensorboard
+        tensorboard = TensorBoard(log_dir=self.logs_path,
+                                  histogram_freq=0,
+                                  write_graph=True,
+                                  write_images=False)
 
         # set up learning rate schedule
         lrate = LearningRateScheduler(self.step_decay)
