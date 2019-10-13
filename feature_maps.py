@@ -65,30 +65,3 @@ for m in model_paths[1:]:
 
     del activation_model
     del model
-
-#
-# img_root = '/home/ubuntu/wrist/datasets/test_images/0'
-# preds = []
-# for i in range(2,301):
-#     img_path = os.path.join(img_root, str(i) + '_0.jpeg')
-#     img = load_img(img_path, target_size=(224,224))
-#     img = img_to_array(img)
-#     img = np.expand_dims(img, axis=0)
-#     img = img*1./255
-#     preds.append(cls.predict(img))
-#
-# prob0 = [p[0][0] for p in preds]
-# cls0 = list(np.array([p > 0.5 for p in prob0]).astype('int32'))
-#
-# img_root = '/home/ubuntu/wrist/datasets/test_images/1'
-# preds = []
-# for i in range(2,301):
-#     img_path = os.path.join(img_root, str(i) + '_1.jpeg')
-#     img = load_img(img_path, target_size=(224,224))
-#     img = img_to_array(img)
-#     img = np.expand_dims(img, axis=0)
-#     img = img*1./255
-#     preds.append(cls.predict(img))
-#
-# prob1 = [p[0][0] for p in preds]
-# cls1 = list(np.array([p > 0.5 for p in prob0]).astype('int32'))

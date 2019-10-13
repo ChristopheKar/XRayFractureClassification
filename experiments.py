@@ -154,13 +154,21 @@ if __name__ == '__main__':
     # cls.layers = 224
     # cls.train()
 
-    cls = ClassifierCNN(DenseNet169, 'AUB_DIS', 'd169_aub_dis_224_v2')
-    cls.layers = 224
-    cls.train()
-
-    cls = ClassifierCNN('d169_mura_class_224_new.h5', 'AUB_DIS', 'd169_aub_dis_224_112_v2')
-    cls.layers = 112
-    cls.train()
-
 # cls = ClassifierCNN(DenseNet169, 'AUB_WRIST', 'd169_aub_wrist_224_new')   # 0.74317 (ep15)
 # cls = ClassifierCNN('d169_mura_class_224_new.h5', 'AUB_WRIST', 'd169_aub_wrist_224_112_new')  # 0.77994 (ep18)
+# cls = ClassifierCNN(DenseNet169, 'AUB_WRIST', 'd169_aub_wrist_scratch_new') # 0.78309 (ep26)   (0.74947 at ep8)
+# cls = ClassifierCNN(DenseNet169, 'AUB_WRIST', 'd169_aub_wrist_scratch_new') 0.69223 (ep43)
+# cls = ClassifierCNN(DenseNet169, 'MURA_ALL', 'd169_mura_class_scratch.h5') 0.84384 (ep57)
+
+cls = ClassifierCNN('d169_mura_class_224_new.h5', 'AUB_DISP', 'd169_aub_dis_224_112_relabeled')
+cls.layers = 112
+cls.train()
+
+cls = ClassifierCNN('d169_aub_wrist_224_relabeled.h5', 'AUB_DISP2', 'd169_aub_dis_224_112f')
+cls.layers = 112
+cls.train()
+
+# cls = ClassifierCNN(DenseNet169, 'AUB_DIS', 'd169_aub_dis_224_v1')   # 0.66682 (ep29, softmax)
+# cls = ClassifierCNN('d169_mura_class_224_new.h5', 'AUB_DIS', 'd169_aub_dis_224_112_v1')   # 0.68113 (ep27, softmax)
+# ^ same with focal loss: 0.66636 (ep34), 0.67974 (ep33)
+# ^ same with focal loss and balanced classes (0.66636 ep 34)
